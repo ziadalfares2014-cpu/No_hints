@@ -2,337 +2,65 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>بدون تلميح</title>
 <style>
-  @import url('https://googleapis.com');
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
-  body { background: linear-gradient(135deg, #1a0b2e 0%, #2d1452 100%); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; }
-  .screen { display: none; width: 100%; max-width: 430px; text-align: center; }
-  .screen.active { display: flex; flex-direction: column; gap: 15px; }
-  h1 { font-size: 2.5rem; font-weight: 900; color: #ffd166; text-shadow: 0 4px 15px rgba(255, 209, 102, 0.3); }
-  .subtitle { color: #d8c8f0; font-size: 0.95rem; }
-  .box { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 16px; }
-  .box-title { font-size: 0.95rem; color: #ffd166; font-weight: 800; margin-bottom: 8px; }
-  .opt-group { display: flex; justify-content: space-between; gap: 8px; }
-  .opt-btn { flex: 1; padding: 10px 8px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); background: transparent; color: #fff; font-weight: 800; font-size: 0.95rem; cursor: pointer; }
-  .opt-btn.selected { background: #ffd166; color: #1a0b2e; border-color: #ffd166; }
-  .start-btn { background: linear-gradient(90deg, #06d6a0, #00b4d8); color: #1a0b2e; border: none; padding: 15px; border-radius: 16px; font-size: 1.3rem; font-weight: 900; cursor: pointer; }
-  .rules-btn { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25); padding: 10px; border-radius: 12px; font-size: 0.95rem; font-weight: 800; cursor: pointer; }
-  .teams-bar { display: flex; justify-content: space-between; gap: 10px; }
-  .team-badge { flex: 1; padding: 10px; border-radius: 14px; font-weight: 900; font-size: 1rem; opacity: 0.5; border: 2px solid transparent; }
-  .team-blue { background: rgba(0, 180, 216, 0.2); color: #48cae4; }
-  .team-red { background: rgba(239, 71, 111, 0.2); color: #ff758f; }
-  .team-badge.turn { opacity: 1; transform: scale(1.04); border-color: #ffd166; }
-  .top-bar { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.35); padding: 10px 18px; border-radius: 16px; }
-  .timer { font-size: 2.1rem; font-weight: 900; color: #ffd166; }
-  .timer.danger { color: #ef476f; }
-  .card { background: #fdf8ee; color: #1a0b2e; border-radius: 26px; padding: 24px 18px; }
-  .card-label { font-size: 0.85rem; color: #8c7a6b; font-weight: 800; }
-  .main-word { font-size: 2.6rem; font-weight: 900; margin: 8px 0 18px; color: #1a0b2e; }
-  .forbidden-box { background: #fce8e8; border: 2px dashed #ef476f; border-radius: 18px; padding: 14px; }
-  .forbidden-title { color: #ef476f; font-size: 0.9rem; font-weight: 800; margin-bottom: 8px; }
-  .forbidden-words { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-  .f-word { background: #fff; color: #d90429; padding: 6px 13px; border-radius: 10px; font-weight: 800; font-size: 1.05rem; }
-  .controls { display: flex; gap: 12px; }
-  .btn-action { flex: 1; padding: 15px; border: none; border-radius: 16px; font-size: 1.15rem; font-weight: 900; color: #fff; cursor: pointer; }
-  .btn-skip { background: #ef476f; }
-  .btn-correct { background: #06d6a0; color: #1a0b2e; }
-  .score-big { font-size: 3.5rem; font-weight: 900; color: #06d6a0; margin: 8px 0; }
-  .rules-text { text-align: right; line-height: 1.8; font-size: 0.95rem; color: #eee; }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:sans-serif;user-select:none}
+  body{background:#1a0b2e;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:15px;text-align:center}
+  .scr{display:none;width:100%;max-width:400px;flex-direction:column;gap:14px}
+  .scr.act{display:flex}
+  h1{font-size:2.3rem;color:#ffd166}
+  .box{background:rgba(255,255,255,0.1);border-radius:16px;padding:14px}
+  .row{display:flex;gap:8px;margin-top:8px}
+  .btn{flex:1;padding:10px;border-radius:10px;border:2px solid #555;background:0;color:#fff;font-weight:700;font-size:1rem}
+  .btn.sel{background:#ffd166;color:#1a0b2e;border-color:#ffd166}
+  .go{background:#06d6a0;color:#1a0b2e;border:0;padding:14px;border-radius:14px;font-size:1.2rem;font-weight:900}
+  .t-bar{display:flex;gap:10px}
+  .tb{flex:1;padding:10px;border-radius:12px;font-weight:900;opacity:0.4;border:2px solid transparent}
+  .tb.on{opacity:1;border-color:#ffd166}
+  .card{background:#fdf8ee;color:#1a0b2e;border-radius:20px;padding:20px}
+  .fbox{background:#fce8e8;border:2px dashed #ef476f;border-radius:12px;padding:10px;margin-top:14px}
+  .fw{display:inline-block;background:#fff;color:#d90429;padding:4px 10px;border-radius:8px;margin:4px;font-weight:700}
 </style>
 </head>
 <body>
-<div id="homeScreen" class="screen active">
+<div id="s1" class="scr act">
   <h1>بدون تلميح</h1>
-  <p class="subtitle">اشرح الكلمة دون نطق الكلمات الممنوعة!</p>
-  <div class="box">
-    <div class="box-title">🎮 نظام اللعب</div>
-    <div class="opt-group" id="modeOpts">
-      <button class="opt-btn selected" data-val="teams">تحدي الفريقين ⚔️</button>
-      <button class="opt-btn" data-val="solo">لعب حر 👤</button>
-    </div>
-  </div>
-  <div class="box" id="targetBox">
-    <div class="box-title">🏆 نقاط الفوز (للفريقين)</div>
-    <div class="opt-group" id="targetOpts">
-      <button class="opt-btn selected" data-val="15">15 نقطة</button>
-      <button class="opt-btn" data-val="25">25 نقطة</button>
-      <button class="opt-btn" data-val="40">40 نقطة</button>
-    </div>
-  </div>
-  <div class="box">
-    <div class="box-title">⏱️ مدة الجولة (بالثواني)</div>
-    <div class="opt-group" id="timeOpts">
-      <button class="opt-btn" data-val="30">30</button>
-      <button class="opt-btn selected" data-val="60">60</button>
-      <button class="opt-btn" data-val="90">90</button>
-    </div>
-  </div>
-  <button class="start-btn" onclick="prepareGame()">ابدأ اللعب الآن 🚀</button>
-  <button class="rules-btn" onclick="showScreen('rulesScreen')">📜 كيف تلعب؟ (القواعد)</button>
+  <div class="box"><div>نظام اللعب</div><div class="row"><button class="btn sel" id="mT" onclick="setM('t')">تحدي الفريقين ⚔️</button><button class="btn" id="mS" onclick="setM('s')">لعب حر 👤</button></div></div>
+  <div class="box" id="bG"><div>نقاط الفوز</div><div class="row"><button class="btn sel" id="g15" onclick="setG(15)">15</button><button class="btn" id="g25" onclick="setG(25)">25</button><button class="btn" id="g40" onclick="setG(40)">40</button></div></div>
+  <div class="box"><div>مدة الجولة</div><div class="row"><button class="btn" id="t30" onclick="setT(30)">30</button><button class="btn sel" id="t60" onclick="setT(60)">60</button><button class="btn" id="t90" onclick="setT(90)">90</button></div></div>
+  <button class="go" onclick="start()">ابدأ اللعب الآن 🚀</button>
 </div>
-<div id="rulesScreen" class="screen">
-  <h1>قواعد اللعبة 📜</h1>
-  <div class="box">
-    <ul class="rules-text" style="padding-right: 18px;">
-      <li>انقسموا إلى فريقين: <strong>الفريق الأزرق</strong> و<strong>الفريق الأحمر</strong>.</li>
-      <li>يمسك لاعب من الفريق الهاتف ويحاول شرح <strong>الكلمة المطلوبة</strong> لفريقه.</li>
-      <li><strong>ممنوع</strong> نطق أي كلمة من الكلمات الثلاث المكتوبة في المربع الأحمر أو مشتقاتها.</li>
-      <li>كل إجابة صحيحة تمنح فريقك <strong>+1 نقطة</strong>.</li>
-      <li>الفريق الذي يصل إلى <strong>نقاط الفوز</strong> أولاً هو البطل!</li>
-    </ul>
-  </div>
-  <button class="start-btn" onclick="showScreen('homeScreen')">فهمت، رجوع ✔</button>
+<div id="s2" class="scr">
+  <h1 id="tTxt">🔵 دور الفريق الأزرق</h1>
+  <div class="box"><p>الأزرق: <b id="pB">0</b> | الأحمر: <b id="pR">0</b></p><p style="color:#ffd166;margin-top:8px">سلّم الهاتف للاعب الذي سيشرح الكلمة</p></div>
+  <button class="go" onclick="play()">ابدأ المؤقت ⏱️</button>
 </div>
-<div id="turnScreen" class="screen">
-  <h1 id="turnTitle" style="color:#48cae4;">دور الفريق الأزرق</h1>
-  <div class="box">
-    <p style="font-size:1.1rem; margin-bottom:10px;">النتيجة الحالية</p>
-    <div style="display:flex; justify-content:space-around; font-size:1.4rem; font-weight:900;">
-      <div style="color:#48cae4;">الأزرق: <span id="preBlue">0</span></div>
-      <div style="color:#ff758f;">الأحمر: <span id="preRed">0</span></div>
-    </div>
-    <p style="margin-top:15px; color:#ffd166; font-size:0.95rem;">أعطِ الهاتف للاعب الذي سيشرح الكلمات!</p>
-  </div>
-  <button class="start-btn" onclick="startRound()">نحن جاهزون، ابدأ المؤقت! ⏱️</button>
+<div id="s3" class="scr">
+  <div class="t-bar" id="tBar"><div class="tb on" id="bB" style="background:#00b4d833;color:#48cae4">🔵 الأزرق: <span id="sB">0</span></div><div class="tb" id="bR" style="background:#ef476f33;color:#ff758f">🔴 الأحمر: <span id="sR">0</span></div></div>
+  <div class="box" style="display:flex;justify-content:space-between;align-items:center"><span id="gLbl" style="color:#ffd166">الهدف: 15</span><span id="sLbl" style="display:none">النقاط: <b id="sS">0</b></span><b id="tmr" style="font-size:1.8rem;color:#ffd166">60</b></div>
+  <div class="card"><div style="color:#888;font-size:0.85rem">الكلمة المطلوبة</div><div id="wM" style="font-size:2.3rem;font-weight:900;margin:8px 0">قهوة</div><div class="fbox"><div style="color:#ef476f;font-size:0.85rem">🚫 ممنوع تقول</div><div id="wF"></div></div></div>
+  <div class="row"><button class="go" style="background:#ef476f;color:#fff" onclick="nxt(0)">تخطي ✖</button><button class="go" onclick="nxt(1)">صحيحة ✔ (+1)</button></div>
 </div>
-<div id="gameScreen" class="screen">
-  <div class="teams-bar" id="teamsBar">
-    <div class="team-badge team-blue turn" id="badgeBlue">🔵 الأزرق: <span id="scoreBlue">0</span></div>
-    <div class="team-badge team-red" id="badgeRed">🔴 الأحمر: <span id="scoreRed">0</span></div>
-  </div>
-  <div class="top-bar">
-    <div id="soloScoreBox" style="display:none;">النقاط: <strong id="soloScore" style="color:#06d6a0; font-size:1.3rem;">0</strong></div>
-    <div id="goalLabel" style="font-size:0.9rem; color:#ffd166;">الهدف: 15</div>
-    <div class="timer" id="timerDisplay">60</div>
-    <div style="font-size:0.9rem; color:#d8c8f0;">بطاقة <span id="cardCount">1</span></div>
-  </div>
-  <div class="card">
-    <div class="card-label">✦ الكلمة المطلوبة ✦</div>
-    <div class="main-word" id="mainWord">ستارة</div>
-    <div class="forbidden-box">
-      <div class="forbidden-title">🚫 ممنوع تقول</div>
-      <div class="forbidden-words" id="forbiddenList"></div>
-    </div>
-  </div>
-  <div class="controls">
-    <button class="btn-action btn-skip" onclick="nextCard(false)">تخطي ✖</button>
-    <button class="btn-action btn-correct" onclick="nextCard(true)">إجابة صحيحة ✔ (+1)</button>
-  </div>
-</div>
-<div id="endScreen" class="screen">
-  <h1 id="endTitle">انتهى الوقت! ⏰</h1>
-  <div class="box">
-    <p id="endSubtitle">مجموع نقاطك</p>
-    <div class="score-big" id="finalScore">0</div>
-  </div>
-  <button class="start-btn" onclick="showScreen('homeScreen')">العب مرة أخرى 🔄</button>
+<div id="s4" class="scr">
+  <h1 id="eT">انتهى الوقت!</h1>
+  <div class="box"><p id="eS">النتيجة</p><h1 id="eN" style="font-size:3rem;color:#06d6a0">0</h1></div>
+  <button class="go" onclick="go('s1')">العب مجدداً 🔄</button>
 </div>
 <script>
-const cards = [
-  {w:"ستارة", f:["نافذة","قماش","خصوصية"]}, {w:"قهوة", f:["صباح","فنجان","كافيين"]},
-  {w:"شاورما", f:["دجاج","لحم","ثوم"]}, {w:"طائرة", f:["سماء","مطار","سفر"]},
-  {w:"كرة القدم", f:["ملعب","هدف","ميسي"]}, {w:"بطارية", f:["شحن","هاتف","طاقة"]},
-  {w:"ثلاجة", f:["برد","طعام","مطبخ"]}, {w:"مظلة", f:["مطر","شتاء","ماء"]},
-  {w:"نظارة", f:["عين","شمس","رؤية"]}, {w:"مفتاح", f:["باب","قفل","فتح"]},
-  {w:"وسادة", f:["نوم","سرير","رأس"]}, {w:"طبيب", f:["مستشفى","مريض","علاج"]},
-  {w:"بحر", f:["سباحة","ماء","شاطئ"]}, {w:"صحراء", f:["رمل","جمل","حر"]},
-  {w:"جواز سفر", f:["مطار","دولة","تأشيرة"]}, {w:"كاميرا", f:["تصوير","صورة","فيديو"]},
-  {w:"ساعة", f:["وقت","يد","دقيقة"]}, {w:"كتاب", f:["قراءة","ورق","صفحة"]},
-  {w:"عسل", f:["نحل","حلو","فطور"]}, {w:"بركان", f:["نار","جبل","حمم"]},
-  {w:"مرآة", f:["وجه","انعكاس","زجاج"]}, {w:"قطار", f:["سكة","محطة","سريع"]},
-  {w:"مقص", f:["قص","ورق","شعر"]}, {w:"صابون", f:["غسيل","يد","رغوة"]},
-  {w:"قمر", f:["ليل","سماء","نجوم"]}, {w:"جسر", f:["نهر","عبور","سيارات"]},
-  {w:"مصباح", f:["ضوء","كهرباء","ظلام"]}, {w:"خاتم", f:["إصبع","زواج","ذهب"]},
-  {w:"حقيبة", f:["مدرسة","سفر","أغراض"]}, {w:"بطيخ", f:["صيف","أحمر","بذور"]},
-  {w:"شوكولاتة", f:["حلو","كاكاو","سكر"]}, {w:"سفينة", f:["بحر","ماء","إبحار"]},
-  {w:"مروحة", f:["هواء","صيف","حر"]}, {w:"شمعة", f:["نار","ضوء","عيد ميلاد"]},
-  {w:"ملعب", f:["كرة","جمهور","مباراة"]}, {w:"مطبخ", f:["طبخ","طعام","فرن"]},
-  {w:"حديقة", f:["شجر","زهور","لعب"]}, {w:"مدرسة", f:["طلاب","معلم","صف"]},
-  {w:"سجادة", f:["أرض","غرفة","صوف"]}, {w:"تلفاز", f:["شاشة","قنوات","مشاهدة"]},
-  {w:"كمبيوتر", f:["لوحة مفاتيح","شاشة","إنترنت"]}, {w:"دراجة", f:["عجلتين","ركوب","شارع"]},
-  {w:"مستشفى", f:["مريض","طبيب","دواء"]}, {w:"سوق", f:["شراء","بيع","محلات"]},
-  {w:"مطار", f:["طائرة","سفر","حقائب"]}, {w:"غابة", f:["أشجار","حيوانات","طبيعة"]},
-  {w:"ثلج", f:["برد","شتاء","أبيض"]}, {w:"شمس", f:["نهار","حر","سماء"]},
-  {w:"مطر", f:["سحاب","ماء","شتاء"]}, {w:"خبز", f:["فرن","طحين","أكل"]},
-  {w:"نحلة", f:["عسل","لسعة","طيران"]}, {w:"أسد", f:["ملك","غابة","زئير"]},
-  {w:"فيل", f:["خرطوم","كبير","أنياب"]}, {w:"زرافة", f:["رقبة","طويلة","بقع"]},
-  {w:"بطريق", f:["ثلج","طائر","أبيض وأسود"]}, {w:"تمساح", f:["نهر","أسنان","أخضر"]},
-  {w:"بيتزا", f:["جبن","إيطاليا","دائرية"]}, {w:"برجر", f:["لحم","خبز","مطعم"]},
-  {w:"فلافل", f:["حمص","زيت","فطور"]}, {w:"كنافة", f:["جبن","قطر","حلويات"]},
-  {w:"موز", f:["أصفر","قرد","فاكهة"]}, {w:"تفاح", f:["أحمر","شجرة","نيوتن"]},
-  {w:"فراولة", f:["أحمر","بذور","مربى"]}, {w:"ليمون", f:["حامض","أصفر","عصير"]},
-  {w:"بصل", f:["دموع","طبخ","رائحة"]}, {w:"بطاطس", f:["قلي","شيبس","أرض"]},
-  {w:"شرطي", f:["قانون","لص","سيارة"]}, {w:"إطفائي", f:["نار","ماء","حريق"]},
-  {w:"مهندس", f:["بناء","تصميم","خوذة"]}, {w:"طيار", f:["طائرة","سماء","قيادة"]},
-  {w:"حلاق", f:["شعر","مقص","مشط"]}, {w:"خياط", f:["قماش","إبرة","ملابس"]},
-  {w:"ميكانيكي", f:["سيارة","تصليح","محرك"]}, {w:"صيدلي", f:["دواء","وصفة","علاج"]},
-  {w:"سماعات", f:["أذن","صوت","موسيقى"]}, {w:"شاحن", f:["كهرباء","سلك","هاتف"]},
-  {w:"مكيف", f:["برد","صيف","هواء"]}, {w:"غسالة", f:["ملابس","ماء","تنظيف"]},
-  {w:"مكنسة", f:["غبار","تنظيف","أرض"]}, {w:"مكواة", f:["ملابس","حرارة","فرد"]},
-  {w:"فرشاة أسنان", f:["معجون","فم","تنظيف"]}, {w:"منشفة", f:["ماء","تجفيف","حمام"]},
-  {w:"عطر", f:["رائحة","زجاجة","رش"]}, {w:"محفظة", f:["نقود","بطاقة","جيب"]},
-  {w:"مظروف", f:["رسالة","ورق","بريد"]}, {w:"علم", f:["دولة","ألوان","سارية"]},
-  {w:"خريطة", f:["دول","اتجاهات","موقع"]}, {w:"بوصلة", f:["شمال","جنوب","اتجاه"]},
-  {w:"تلسكوب", f:["نجوم","فضاء","رؤية"]}, {w:"مجهر", f:["صغير","مختبر","تكبير"]},
-  {w:"سلم", f:["صعود","درج","ارتفاع"]}, {w:"مصعد", f:["عمارة","زر","طوابق"]},
-  {w:"إشارة مرور", f:["أحمر","أخضر","سيارات"]}, {w:"وقود", f:["بنزين","سيارة","محطة"]},
-  {w:"عجلة", f:["دائرية","سيارة","مطاط"]}, {w:"قارب", f:["بحر","مجداف","صغير"]},
-  {w:"صاروخ", f:["فضاء","قمر","انطلاق"]}, {w:"رائد فضاء", f:["قمر","بدلة","جاذبية"]},
-  {w:"هرم", f:["مصر","فراعنة","مثلث"]}, {w:"تاج", f:["ملك","رأس","ذهب"]}
-];
-
-let gameMode = 'teams', targetScore = 15, selectedTime = 60;
-let timeLeft = 60, soloScore = 0, blueScore = 0, redScore = 0;
-let currentTeam = 'blue', timerInt, deck = [], idx = 0, roundCards = 0;
-
-function setupOpts(groupId, callback) {
-  document.querySelectorAll('#' + groupId + ' .opt-btn').forEach(btn => {
-    btn.onclick = () => {
-      document.querySelectorAll('#' + groupId + ' .opt-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      callback(btn.dataset.val);
-    };
-  });
-}
-
-setupOpts('modeOpts', val => {
-  gameMode = val;
-  document.getElementById('targetBox').style.display = (val === 'teams') ? 'block' : 'none';
-});
-setupOpts('targetOpts', val => targetScore = parseInt(val));
-setupOpts('timeOpts', val => selectedTime = parseInt(val));
-
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-function shuffleDeck() {
-  deck = [...cards].sort(() => Math.random() - 0.5);
-  idx = 0;
-}
-
-function prepareGame() {
-  shuffleDeck();
-  if (gameMode === 'solo') {
-    soloScore = 0;
-    document.getElementById('teamsBar').style.display = 'none';
-    document.getElementById('goalLabel').style.display = 'none';
-    document.getElementById('soloScoreBox').style.display = 'block';
-    document.getElementById('soloScore').innerText = '0';
-    startRound();
-  } else {
-    blueScore = 0; redScore = 0; currentTeam = 'blue';
-    document.getElementById('teamsBar').style.display = 'flex';
-    document.getElementById('goalLabel').style.display = 'block';
-    document.getElementById('goalLabel').innerText = 'الهدف: ' + targetScore;
-    document.getElementById('soloScoreBox').style.display = 'none';
-    showTurnScreen();
-  }
-}
-
-function showTurnScreen() {
-  const title = document.getElementById('turnTitle');
-  if (currentTeam === 'blue') {
-    title.innerText = '🔵 دور الفريق الأزرق';
-    title.style.color = '#48cae4';
-  } else {
-    title.innerText = '🔴 دور الفريق الأحمر';
-    title.style.color = '#ff758f';
-  }
-  document.getElementById('preBlue').innerText = blueScore;
-  document.getElementById('preRed').innerText = redScore;
-  showScreen('turnScreen');
-}
-
-function startRound() {
-  timeLeft = selectedTime;
-  roundCards = 0;
-  document.getElementById('timerDisplay').innerText = timeLeft;
-  document.getElementById('timerDisplay').classList.remove('danger');
-  if (gameMode === 'teams') {
-    document.getElementById('scoreBlue').innerText = blueScore;
-    document.getElementById('scoreRed').innerText = redScore;
-    document.getElementById('badgeBlue').classList.toggle('turn', currentTeam === 'blue');
-    document.getElementById('badgeRed').classList.toggle('turn', currentTeam === 'red');
-  }
-  showScreen('gameScreen');
-  renderCard();
-  clearInterval(timerInt);
-  timerInt = setInterval(() => {
-    timeLeft--;
-    const tEl = document.getElementById('timerDisplay');
-    tEl.innerText = timeLeft;
-    if (timeLeft <= 5) tEl.classList.add('danger');
-    if (timeLeft <= 0) { clearInterval(timerInt); endRound(); }
-  }, 1000);
-}
-
-function renderCard() {
-  if (idx >= deck.length) shuffleDeck();
-  roundCards++;
-  const c = deck[idx];
-  document.getElementById('cardCount').innerText = roundCards;
-  document.getElementById('mainWord').innerText = c.w;
-  const fList = document.getElementById('forbiddenList');
-  fList.innerHTML = '';
-  c.f.forEach(word => {
-    const span = document.createElement('span');
-    span.className = 'f-word';
-    span.innerText = word;
-    fList.appendChild(span);
-  });
-}
-
-function nextCard(isCorrect) {
-  if (isCorrect) {
-    if (gameMode === 'solo') {
-      soloScore++;
-      document.getElementById('soloScore').innerText = soloScore;
-    } else {
-      if (currentTeam === 'blue') {
-        blueScore++;
-        document.getElementById('scoreBlue').innerText = blueScore;
-        if (blueScore >= targetScore) { clearInterval(timerInt); declareWinner('blue'); return; }
-      } else {
-        redScore++;
-        document.getElementById('scoreRed').innerText = redScore;
-        if (redScore >= targetScore) { clearInterval(timerInt); declareWinner('red'); return; }
-      }
-    }
-  }
-  idx++;
-  renderCard();
-}
-
-function endRound() {
-  if (gameMode === 'solo') {
-    document.getElementById('endTitle').innerText = 'انتهى الوقت! ⏰';
-    document.getElementById('endSubtitle').innerText = 'مجموع نقاطك في هذه الجولة';
-    document.getElementById('finalScore').innerText = soloScore;
-    document.getElementById('finalScore').style.color = '#06d6a0';
-    showScreen('endScreen');
-  } else {
-    currentTeam = (currentTeam === 'blue') ? 'red' : 'blue';
-    showTurnScreen();
-  }
-}
-
-function declareWinner(winner) {
-  document.getElementById('endTitle').innerText = '🏆 مبروك الفوز! 🏆';
-  if (winner === 'blue') {
-    document.getElementById('endSubtitle').innerText = 'البطل هو الفريق الأزرق!';
-    document.getElementById('finalScore').innerText = blueScore + ' - ' + redScore;
-    document.getElementById('finalScore').style.color = '#48cae4';
-  } else {
-    document.getElementById('endSubtitle').innerText = 'البطل هو الفريق الأحمر!';
-    document.getElementById('finalScore').innerText = redScore + ' - ' + blueScore;
-    document.getElementById('finalScore').style.color = '#ff758f';
-  }
-  showScreen('endScreen');
-}
+var C=[{w:"قهوة",f:["صباح","فنجان","كافيين"]},{w:"شاورما",f:["دجاج","لحم","ثوم"]},{w:"طائرة",f:["سماء","مطار","سفر"]},{w:"كرة القدم",f:["ملعب","هدف","ميسي"]},{w:"بطارية",f:["شحن","هاتف","طاقة"]},{w:"ثلاجة",f:["برد","طعام","مطبخ"]},{w:"مظلة",f:["مطر","شتاء","ماء"]},{w:"نظارة",f:["عين","شمس","رؤية"]},{w:"مفتاح",f:["باب","قفل","فتح"]},{w:"وسادة",f:["نوم","سرير","رأس"]},{w:"طبيب",f:["مستشفى","مريض","علاج"]},{w:"بحر",f:["سباحة","ماء","شاطئ"]},{w:"صحراء",f:["رمل","جمل","حر"]},{w:"جواز سفر",f:["مطار","دولة","تأشيرة"]},{w:"كاميرا",f:["تصوير","صورة","فيديو"]},{w:"ساعة",f:["وقت","يد","دقيقة"]},{w:"كتاب",f:["قراءة","ورق","صفحة"]},{w:"عسل",f:["نحل","حلو","فطور"]},{w:"مرآة",f:["وجه","انعكاس","زجاج"]},{w:"قطار",f:["سكة","محطة","سريع"]},{w:"مقص",f:["قص","ورق","شعر"]},{w:"قمر",f:["ليل","سماء","نجوم"]},{w:"خاتم",f:["إصبع","زواج","ذهب"]},{w:"بطيخ",f:["صيف","أحمر","بذور"]},{w:"بيتزا",f:["جبن","إيطاليا","دائرية"]},{w:"فلافل",f:["حمص","زيت","فطور"]},{w:"كنافة",f:["جبن","قطر","حلويات"]},{w:"شرطي",f:["قانون","لص","سيارة"]},{w:"سماعات",f:["أذن","صوت","موسيقى"]},{w:"هرم",f:["مصر","فراعنة","مثلث"]}];
+var M='t',G=15,T=60,tl=60,ss=0,sb=0,sr=0,tr='b',iv,dk=[],ix=0;
+function go(id){document.querySelectorAll('.scr').forEach(function(e){e.classList.remove('act')});document.getElementById(id).classList.add('act')}
+function setM(m){M=m;document.getElementById('mT').classList.toggle('sel',m=='t');document.getElementById('mS').classList.toggle('sel',m=='s');document.getElementById('bG').style.display=(m=='t')?'block':'none'}
+function setG(g){G=g;.forEach(function(x){document.getElementById('g'+x).classList.toggle('sel',x==g)})}
+function setT(t){T=t;.forEach(function(x){document.getElementById('t'+x).classList.toggle('sel',x==t)})}
+function start(){dk=C.slice().sort(function(){return Math.random()-0.5});ix=0;if(M=='s'){ss=0;document.getElementById('tBar').style.display='none';document.getElementById('gLbl').style.display='none';document.getElementById('sLbl').style.display='inline';document.getElementById('sS').innerText=0;play()}else{sb=0;sr=0;tr='b';document.getElementById('tBar').style.display='flex';document.getElementById('gLbl').style.display='inline';document.getElementById('gLbl').innerText='الهدف: '+G;document.getElementById('sLbl').style.display='none';turn()}}
+function turn(){var e=document.getElementById('tTxt');e.innerText=(tr=='b')?'🔵 دور الفريق الأزرق':'🔴 دور الفريق الأحمر';e.style.color=(tr=='b')?'#48cae4':'#ff758f';document.getElementById('pB').innerText=sb;document.getElementById('pR').innerText=sr;go('s2')}
+function play(){tl=T;document.getElementById('tmr').innerText=tl;if(M=='t'){document.getElementById('sB').innerText=sb;document.getElementById('sR').innerText=sr;document.getElementById('bB').classList.toggle('on',tr=='b');document.getElementById('bR').classList.toggle('on',tr=='r')}go('s3');card();clearInterval(iv);iv=setInterval(function(){tl--;document.getElementById('tmr').innerText=tl;if(tl<=0){clearInterval(iv);end()}},1000)}
+function card(){if(ix>=dk.length){dk=C.slice().sort(function(){return Math.random()-0.5});ix=0}var c=dk[ix];document.getElementById('wM').innerText=c.w;var h='';c.f.forEach(function(w){h+='<span class="fw">'+w+'</span>'});document.getElementById('wF').innerHTML=h}
+function nxt(ok){if(ok){if(M=='s'){ss++;document.getElementById('sS').innerText=ss}else{if(tr=='b'){sb++;document.getElementById('sB').innerText=sb;if(sb>=G){clearInterval(iv);win('b');return}}else{sr++;document.getElementById('sR').innerText=sr;if(sr>=G){clearInterval(iv);win('r');return}}}}ix++;card()}
+function end(){if(M=='s'){document.getElementById('eT').innerText='انتهى الوقت!';document.getElementById('eS').innerText='نقاطك';document.getElementById('eN').innerText=ss;go('s4')}else{tr=(tr=='b')?'r':'b';turn()}}
+function win(w){document.getElementById('eT').innerText='🏆 مبروك الفوز! 🏆';document.getElementById('eS').innerText=(w=='b')?'البطل هو الفريق الأزرق':'البطل هو الفريق الأحمر';document.getElementById('eN').innerText=sb+' - '+sr;go('s4')}
 </script>
 </body>
 </html>
