@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>بدون تلميح</title>
+<style>
+  @import url('https://googleapis.com');
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; user-select: none; }
+  body { background: linear-gradient(135deg, #1a0b2e 0%, #2d1452 100%); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; }
+  .screen { display: none; width: 100%; max-width: 420px; text-align: center; animation: fadeIn 0.3s ease; }
+  .screen.active { display: flex; flex-direction: column; gap: 18px; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  h1 { font-size: 2.6rem; font-weight: 900; color: #ffd166; text-shadow: 0 4px 15px rgba(255, 209, 102, 0.3); }
+  .subtitle { color: #d8c8f0; font-size: 1rem; margin-bottom: 10px; }
+  .box { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 20px; backdrop-filter: blur(10px); }
+  .opt-group { display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; }
+  .opt-btn { flex: 1; padding: 12px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); background: transparent; color: #fff; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.2s; }
+  .opt-btn.selected { background: #ffd166; color: #1a0b2e; border-color: #ffd166; }
+  .start-btn { background: linear-gradient(90deg, #06d6a0, #00b4d8); color: #1a0b2e; border: none; padding: 16px; border-radius: 16px; font-size: 1.4rem; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(6, 214, 160, 0.4); }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 12px 18px; border-radius: 16px; }
+  .timer { font-size: 2rem; font-weight: 900; color: #ffd166; }
+  .timer.danger { color: #ef476f; animation: pulse 0.5s infinite; }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+  .card { background: #fdf8ee; color: #1a0b2e; border-radius: 26px; padding: 28px 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); position: relative; }
+  .card-label { font-size: 0.85rem; color: #8c7a6b; font-weight: 800; }
+  .main-word { font-size: 2.7rem; font-weight: 900; margin: 10px 0 22px; color: #1a0b2e; }
+  .forbidden-box { background: #fce8e8; border: 2px dashed #ef476f; border-radius: 18px; padding: 15px; }
+  .forbidden-title { color: #ef476f; font-size: 0.9rem; font-weight: 800; margin-bottom: 10px; }
+  .forbidden-words { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .f-word { background: #fff; color: #d90429; padding: 6px 14px; border-radius: 10px; font-weight: 800; font-size: 1.05rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+  .controls { display: flex; gap: 12px; }
+  .btn-action { flex: 1; padding: 16px; border: none; border-radius: 16px; font-size: 1.2rem; font-weight: 900; color: #fff; cursor: pointer; }
+  .btn-skip { background: #ef476f; box-shadow: 0 5px 15px rgba(239, 71, 111, 0.35); }
+  .btn-correct { background: #06d6a0; color: #1a0b2e; box-shadow: 0 5px 15px rgba(6, 214, 160, 0.35); }
+  .score-big { font-size: 4rem; font-weight: 900; color: #06d6a0; margin: 10px 0; }
+</style>
+</head>
+<body>
+
+<div id="homeScreen" class="screen active">
+  <h1>بدون تلميح</h1>
+  <p class="subtitle">اشرح الكلمة لفريقك دون نطق الكلمات الممنوعة!</p>
+  <div class="box">
+    <p>⏱️ مدة الجولة (بالثواني)</p>
+    <div class="opt-group" id="timeOpts">
+      <button class="opt-btn" data-val="30">30</button>
+      <button class="opt-btn selected" data-val="60">60</button>
+      <button class="opt-btn" data-val="90">90</button>
+    </div>
+  </div>
+  <button class="start-btn" onclick="startGame()">ابدأ اللعب الآن 🚀</button>
+</div>
+
+<div id="gameScreen" class="screen">
+  <div class="top-bar">
+    <div>النقاط: <strong id="scoreDisplay" style="color:#06d6a0; font-size:1.3rem;">0</strong></div>
+    <div class="timer" id="timerDisplay">60</div>
+    <div style="font-size:0.9rem; color:#d8c8f0;">بطاقة <span id="cardCount">1</span></div>
+  </div>
+  <div class="card">
+    <div class="card-label">✦ الكلمة المطلوبة ✦</div>
+    <div class="main-word" id="mainWord">ستارة</div>
+    <div class="forbidden-box">
+      <div class="forbidden-title">🚫 ممنوع تقول</div>
+      <div class="forbidden-words" id="forbiddenList"></div>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="btn-action btn-skip" onclick="nextCard(false)">تخطي ✖</button>
+    <button class="btn-action btn-correct" onclick="nextCard(true)">إجابة صحيحة ✔ (+1)</button>
+  </div>
+</div>
+
+<div id="endScreen" class="screen">
+  <h1>انتهى الوقت! ⏰</h1>
+  <div class="box">
+    <p>مجموع نقاطك في هذه الجولة</p>
+    <div class="score-big" id="finalScore">0</div>
+  </div>
+  <button class="start-btn" onclick="startGame()">العب مرة أخرى 🔄</button>
+</div>
+
+<script>
+const cards = [
+  {w:"ستارة", f:["نافذة","قماش","خصوصية"]}, {w:"قهوة", f:["صباح","فنجان","كافيين"]},
+  {w:"شاورما", f:["دجاج","لحم","ثوم"]}, {w:"طائرة", f:["سماء","مطار","سفر"]},
+  {w:"كرة القدم", f:["ملعب","هدف","ميسي"]}, {w:"بطارية", f:["شحن","هاتف","طاقة"]},
+  {w:"ثلاجة", f:["برد","طعام","مطبخ"]}, {w:"مظلة", f:["مطر","شتاء","ماء"]},
+  {w:"نظارة", f:["عين","شمس","رؤية"]}, {w:"مفتاح", f:["باب","قفل","فتح"]},
+  {w:"وسادة", f:["نوم","سرير","رأس"]}, {w:"طبيب", f:["مستشفى","مريض","علاج"]},
+  {w:"بحر", f:["سباحة","ماء","شاطئ"]}, {w:"صحراء", f:["رمل","جمل","حر"]},
+  {w:"جواز سفر", f:["مطار","دولة","تأشيرة"]}, {w:"كاميرا", f:["تصوير","صورة","فيديو"]},
+  {w:"ساعة", f:["وقت","يد","دقيقة"]}, {w:"كتاب", f:["قراءة","ورق","صفحة"]},
+  {w:"عسل", f:["نحل","حلو","فطور"]}, {w:"بركان", f:["نار","جبل","حمم"]},
+  {w:"مرآة", f:["وجه","انعكاس","زجاج"]}, {w:"قطار", f:["سكة","محطة","سريع"]},
+  {w:"مقص", f:["قص","ورق","شعر"]}, {w:"صابون", f:["غسيل","يد","رغوة"]},
+  {w:"قمر", f:["ليل","سماء","نجوم"]}, {w:"جسر", f:["نهر","عبور","سيارات"]},
+  {w:"مصباح", f:["ضوء","كهرباء","ظلام"]}, {w:"خاتم", f:["إصبع","زواج","ذهب"]},
+  {w:"حقيبة", f:["مدرسة","سفر","أغراض"]}, {w:"بطيخ", f:["صيف","أحمر","بذور"]},
+  {w:"شوكولاتة", f:["حلو","كاكاو","سكر"]}, {w:"سفينة", f:["بحر","ماء","إبحار"]},
+  {w:"مروحة", f:["هواء","صيف","حر"]}, {w:"شمعة", f:["نار","ضوء","عيد ميلاد"]},
+  {w:"ملعب", f:["كرة","جمهور","مباراة"]}, {w:"مطبخ", f:["طبخ","طعام","فرن"]},
+  {w:"حديقة", f:["شجر","زهور","لعب"]}, {w:"مدرسة", f:["طلاب","معلم","صف"]},
+  {w:"سجادة", f:["أرض","غرفة","صوف"]}, {w:"تلفاز", f:["شاشة","قنوات","مشاهدة"]},
+  {w:"كمبيوتر", f:["لوحة مفاتيح","شاشة","إنترنت"]}, {w:"دراجة", f:["عجلتين","ركوب","شارع"]},
+  {w:"مستشفى", f:["مريض","طبيب","دواء"]}, {w:"سوق", f:["شراء","بيع","محلات"]},
+  {w:"مطار", f:["طائرة","سفر","حقائب"]}, {w:"غابة", f:["أشجار","حيوانات","طبيعة"]},
+  {w:"ثلج", f:["برد","شتاء","أبيض"]}, {w:"شمس", f:["نهار","حر","سماء"]},
+  {w:"مطر", f:["سحاب","ماء","شتاء"]}, {w:"خبز", f:["فرن","طحين","أكل"]}
+];
+
+let selectedTime = 60, timeLeft = 60, score = 0, timerInt, deck = [], idx = 0;
+
+document.querySelectorAll('#timeOpts .opt-btn').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('#timeOpts .opt-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedTime = parseInt(btn.dataset.val);
+  };
+});
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startGame() {
+  score = 0; timeLeft = selectedTime; idx = 0;
+  deck = [...cards].sort(() => Math.random() - 0.5);
+  document.getElementById('scoreDisplay').innerText = score;
+  document.getElementById('timerDisplay').innerText = timeLeft;
+  document.getElementById('timerDisplay').classList.remove('danger');
+  showScreen('gameScreen');
+  renderCard();
+  clearInterval(timerInt);
+  timerInt = setInterval(() => {
+    timeLeft--;
+    const tEl = document.getElementById('timerDisplay');
+    tEl.innerText = timeLeft;
+    if (timeLeft <= 5) tEl.classList.add('danger');
+    if (timeLeft <= 0) {
+      clearInterval(timerInt);
+      document.getElementById('finalScore').innerText = score;
+      showScreen('endScreen');
+    }
+  }, 1000);
+}
+
+function renderCard() {
+  if (idx >= deck.length) { deck = [...cards].sort(() => Math.random() - 0.5); idx = 0; }
+  const c = deck[idx];
+  document.getElementById('cardCount').innerText = idx + 1;
+  document.getElementById('mainWord').innerText = c.w;
+  const fList = document.getElementById('forbiddenList');
+  fList.innerHTML = '';
+  c.f.forEach(word => {
+    const span = document.createElement('span');
+    span.className = 'f-word';
+    span.innerText = word;
+    fList.appendChild(span);
+  });
+}
+
+function nextCard(isCorrect) {
+  if (isCorrect) { score++; document.getElementById('scoreDisplay').innerText = score; }
+  idx++;
+  renderCard();
+}
+</script>
+</body>
+</html>
