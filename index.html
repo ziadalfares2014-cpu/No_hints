@@ -52,8 +52,8 @@ var C=[{w:"قهوة",f:["صباح","فنجان","كافيين"]},{w:"شاورم�
 var M='t',G=15,T=60,tl=60,ss=0,sb=0,sr=0,tr='b',iv,dk=[],ix=0;
 function go(id){document.querySelectorAll('.scr').forEach(function(e){e.classList.remove('act')});document.getElementById(id).classList.add('act')}
 function setM(m){M=m;document.getElementById('mT').classList.toggle('sel',m=='t');document.getElementById('mS').classList.toggle('sel',m=='s');document.getElementById('bG').style.display=(m=='t')?'block':'none'}
-function setG(g){G=g;.forEach(function(x){document.getElementById('g'+x).classList.toggle('sel',x==g)})}
-function setT(t){T=t;.forEach(function(x){document.getElementById('t'+x).classList.toggle('sel',x==t)})}
+function setG(g){G=g;[15,25,40].forEach(function(x){document.getElementById('g'+x).classList.toggle('sel',x==g)})}
+function setT(t){T=t;[30,60,90].forEach(function(x){document.getElementById('t'+x).classList.toggle('sel',x==t)})}
 function start(){dk=C.slice().sort(function(){return Math.random()-0.5});ix=0;if(M=='s'){ss=0;document.getElementById('tBar').style.display='none';document.getElementById('gLbl').style.display='none';document.getElementById('sLbl').style.display='inline';document.getElementById('sS').innerText=0;play()}else{sb=0;sr=0;tr='b';document.getElementById('tBar').style.display='flex';document.getElementById('gLbl').style.display='inline';document.getElementById('gLbl').innerText='الهدف: '+G;document.getElementById('sLbl').style.display='none';turn()}}
 function turn(){var e=document.getElementById('tTxt');e.innerText=(tr=='b')?'🔵 دور الفريق الأزرق':'🔴 دور الفريق الأحمر';e.style.color=(tr=='b')?'#48cae4':'#ff758f';document.getElementById('pB').innerText=sb;document.getElementById('pR').innerText=sr;go('s2')}
 function play(){tl=T;document.getElementById('tmr').innerText=tl;if(M=='t'){document.getElementById('sB').innerText=sb;document.getElementById('sR').innerText=sr;document.getElementById('bB').classList.toggle('on',tr=='b');document.getElementById('bR').classList.toggle('on',tr=='r')}go('s3');card();clearInterval(iv);iv=setInterval(function(){tl--;document.getElementById('tmr').innerText=tl;if(tl<=0){clearInterval(iv);end()}},1000)}
