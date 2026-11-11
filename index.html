@@ -6,21 +6,21 @@
 <title>بدون تلميح</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0;font-family:sans-serif;user-select:none}
-  body{background:#1a0b2e;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:15px;text-align:center}
-  .scr{display:none;width:100%;max-width:400px;flex-direction:column;gap:14px}
+  body{background:linear-gradient(135deg,#1a0b2e,#2d1452);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:15px;text-align:center}
+  .scr{display:none;width:100%;max-width:410px;flex-direction:column;gap:14px}
   .scr.act{display:flex}
-  h1{font-size:2.3rem;color:#ffd166}
-  .box{background:rgba(255,255,255,0.1);border-radius:16px;padding:14px}
+  h1{font-size:2.4rem;color:#ffd166;text-shadow:0 3px 10px rgba(0,0,0,0.4)}
+  .box{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:18px;padding:14px}
   .row{display:flex;gap:8px;margin-top:8px}
-  .btn{flex:1;padding:10px;border-radius:10px;border:2px solid #555;background:0;color:#fff;font-weight:700;font-size:1rem}
+  .btn{flex:1;padding:11px;border-radius:12px;border:2px solid rgba(255,255,255,0.2);background:transparent;color:#fff;font-weight:700;font-size:1rem}
   .btn.sel{background:#ffd166;color:#1a0b2e;border-color:#ffd166}
-  .go{background:#06d6a0;color:#1a0b2e;border:0;padding:14px;border-radius:14px;font-size:1.2rem;font-weight:900}
+  .go{background:linear-gradient(90deg,#06d6a0,#00b4d8);color:#1a0b2e;border:0;padding:15px;border-radius:14px;font-size:1.25rem;font-weight:900}
   .t-bar{display:flex;gap:10px}
-  .tb{flex:1;padding:10px;border-radius:12px;font-weight:900;opacity:0.4;border:2px solid transparent}
+  .tb{flex:1;padding:10px;border-radius:12px;font-weight:900;opacity:0.45;border:2px solid transparent}
   .tb.on{opacity:1;border-color:#ffd166}
-  .card{background:#fdf8ee;color:#1a0b2e;border-radius:20px;padding:20px}
-  .fbox{background:#fce8e8;border:2px dashed #ef476f;border-radius:12px;padding:10px;margin-top:14px}
-  .fw{display:inline-block;background:#fff;color:#d90429;padding:4px 10px;border-radius:8px;margin:4px;font-weight:700}
+  .card{background:#fdf8ee;color:#1a0b2e;border-radius:24px;padding:24px 16px;box-shadow:0 12px 30px rgba(0,0,0,0.4)}
+  .fbox{background:#fce8e8;border:2px dashed #ef476f;border-radius:14px;padding:12px;margin-top:16px}
+  .fw{display:inline-block;background:#fff;color:#d90429;padding:5px 12px;border-radius:8px;margin:4px;font-weight:700;font-size:1.05rem}
 </style>
 </head>
 <body>
@@ -28,36 +28,37 @@
   <h1>بدون تلميح</h1>
   <div class="box"><div>نظام اللعب</div><div class="row"><button class="btn sel" id="mT" onclick="setM('t')">تحدي الفريقين ⚔️</button><button class="btn" id="mS" onclick="setM('s')">لعب حر 👤</button></div></div>
   <div class="box" id="bG"><div>نقاط الفوز</div><div class="row"><button class="btn sel" id="g15" onclick="setG(15)">15</button><button class="btn" id="g25" onclick="setG(25)">25</button><button class="btn" id="g40" onclick="setG(40)">40</button></div></div>
-  <div class="box"><div>مدة الجولة</div><div class="row"><button class="btn" id="t30" onclick="setT(30)">30</button><button class="btn sel" id="t60" onclick="setT(60)">60</button><button class="btn" id="t90" onclick="setT(90)">90</button></div></div>
+  <div class="box"><div>مدة الجولة (ثانية)</div><div class="row"><button class="btn" id="t30" onclick="setT(30)">30</button><button class="btn sel" id="t60" onclick="setT(60)">60</button><button class="btn" id="t90" onclick="setT(90)">90</button></div></div>
   <button class="go" onclick="start()">ابدأ اللعب الآن 🚀</button>
 </div>
 <div id="s2" class="scr">
   <h1 id="tTxt">🔵 دور الفريق الأزرق</h1>
-  <div class="box"><p>الأزرق: <b id="pB">0</b> | الأحمر: <b id="pR">0</b></p><p style="color:#ffd166;margin-top:8px">سلّم الهاتف للاعب الذي سيشرح الكلمة</p></div>
+  <div class="box"><p style="font-size:1.2rem">الأزرق: <b id="pB">0</b> | الأحمر: <b id="pR">0</b></p><p style="color:#ffd166;margin-top:10px">سلّم الهاتف للاعب الذي سيشرح الكلمة</p></div>
   <button class="go" onclick="play()">ابدأ المؤقت ⏱️</button>
 </div>
 <div id="s3" class="scr">
   <div class="t-bar" id="tBar"><div class="tb on" id="bB" style="background:#00b4d833;color:#48cae4">🔵 الأزرق: <span id="sB">0</span></div><div class="tb" id="bR" style="background:#ef476f33;color:#ff758f">🔴 الأحمر: <span id="sR">0</span></div></div>
-  <div class="box" style="display:flex;justify-content:space-between;align-items:center"><span id="gLbl" style="color:#ffd166">الهدف: 15</span><span id="sLbl" style="display:none">النقاط: <b id="sS">0</b></span><b id="tmr" style="font-size:1.8rem;color:#ffd166">60</b></div>
-  <div class="card"><div style="color:#888;font-size:0.85rem">الكلمة المطلوبة</div><div id="wM" style="font-size:2.3rem;font-weight:900;margin:8px 0">قهوة</div><div class="fbox"><div style="color:#ef476f;font-size:0.85rem">🚫 ممنوع تقول</div><div id="wF"></div></div></div>
+  <div class="box" style="display:flex;justify-content:space-between;align-items:center"><span id="gLbl" style="color:#ffd166;font-weight:700">الهدف: 15</span><span id="sLbl" style="display:none">النقاط: <b id="sS">0</b></span><b id="tmr" style="font-size:1.9rem;color:#ffd166">60</b></div>
+  <div class="card"><div style="color:#888;font-size:0.85rem">✦ الكلمة المطلوبة ✦</div><div id="wM" style="font-size:2.5rem;font-weight:900;margin:10px 0">قهوة</div><div class="fbox"><div style="color:#ef476f;font-size:0.85rem;font-weight:700">🚫 ممنوع تقول</div><div id="wF"></div></div></div>
   <div class="row"><button class="go" style="background:#ef476f;color:#fff" onclick="nxt(0)">تخطي ✖</button><button class="go" onclick="nxt(1)">صحيحة ✔ (+1)</button></div>
 </div>
 <div id="s4" class="scr">
   <h1 id="eT">انتهى الوقت!</h1>
-  <div class="box"><p id="eS">النتيجة</p><h1 id="eN" style="font-size:3rem;color:#06d6a0">0</h1></div>
+  <div class="box"><p id="eS">النتيجة</p><h1 id="eN" style="font-size:3.2rem;color:#06d6a0;margin-top:8px">0</h1></div>
   <button class="go" onclick="go('s1')">العب مجدداً 🔄</button>
 </div>
 <script>
-var C=[{w:"قهوة",f:["صباح","فنجان","كافيين"]},{w:"شاورما",f:["دجاج","لحم","ثوم"]},{w:"طائرة",f:["سماء","مطار","سفر"]},{w:"كرة القدم",f:["ملعب","هدف","ميسي"]},{w:"بطارية",f:["شحن","هاتف","طاقة"]},{w:"ثلاجة",f:["برد","طعام","مطبخ"]},{w:"مظلة",f:["مطر","شتاء","ماء"]},{w:"نظارة",f:["عين","شمس","رؤية"]},{w:"مفتاح",f:["باب","قفل","فتح"]},{w:"وسادة",f:["نوم","سرير","رأس"]},{w:"طبيب",f:["مستشفى","مريض","علاج"]},{w:"بحر",f:["سباحة","ماء","شاطئ"]},{w:"صحراء",f:["رمل","جمل","حر"]},{w:"جواز سفر",f:["مطار","دولة","تأشيرة"]},{w:"كاميرا",f:["تصوير","صورة","فيديو"]},{w:"ساعة",f:["وقت","يد","دقيقة"]},{w:"كتاب",f:["قراءة","ورق","صفحة"]},{w:"عسل",f:["نحل","حلو","فطور"]},{w:"مرآة",f:["وجه","انعكاس","زجاج"]},{w:"قطار",f:["سكة","محطة","سريع"]},{w:"مقص",f:["قص","ورق","شعر"]},{w:"قمر",f:["ليل","سماء","نجوم"]},{w:"خاتم",f:["إصبع","زواج","ذهب"]},{w:"بطيخ",f:["صيف","أحمر","بذور"]},{w:"بيتزا",f:["جبن","إيطاليا","دائرية"]},{w:"فلافل",f:["حمص","زيت","فطور"]},{w:"كنافة",f:["جبن","قطر","حلويات"]},{w:"شرطي",f:["قانون","لص","سيارة"]},{w:"سماعات",f:["أذن","صوت","موسيقى"]},{w:"هرم",f:["مصر","فراعنة","مثلث"]}];
+var raw="قهوة:صباح,فنجان,كافيين|شاورما:دجاج,لحم,ثوم|طائرة:سماء,مطار,سفر|كرة القدم:ملعب,هدف,ميسي|بطارية:شحن,هاتف,طاقة|ثلاجة:برد,طعام,مطبخ|مظلة:مطر,شتاء,ماء|نظارة:عين,شمس,رؤية|مفتاح:باب,قفل,فتح|وسادة:نوم,سرير,رأس|طبيب:مستشفى,مريض,علاج|بحر:سباحة,ماء,شاطئ|صحراء:رمل,جمل,حر|جواز سفر:مطار,دولة,تأشيرة|كاميرا:تصوير,صورة,فيديو|ساعة:وقت,يد,دقيقة|كتاب:قراءة,ورق,صفحة|عسل:نحل,حلو,فطور|مرآة:وجه,انعكاس,زجاج|قطار:سكة,محطة,سريع|مقص:قص,ورق,شعر|قمر:ليل,سماء,نجوم|خاتم:إصبع,زواج,ذهب|بطيخ:صيف,أحمر,بذور|بيتزا:جبن,إيطاليا,دائرية|فلافل:حمص,زيت,فطور|كنافة:جبن,قطر,حلويات|شرطي:قانون,لص,سيارة|سماعات:أذن,صوت,موسيقى|هرم:مصر,فراعنة,مثلث|بركان:نار,جبل,حمم|صابون:غسيل,يد,رغوة|جسر:نهر,عبور,سيارات|مصباح:ضوء,كهرباء,ظلام|حقيبة:مدرسة,سفر,أغراض|شوكولاتة:حلو,كاكاو,سكر|سفينة:بحر,ماء,إبحار|مروحة:هواء,صيف,حر|شمعة:نار,ضوء,عيد|حديقة:شجر,زهور,لعب|مدرسة:طلاب,معلم,صف|تلفاز:شاشة,قنوات,مشاهدة|كمبيوتر:شاشة,إنترنت,لوحة|دراجة:عجلتين,ركوب,شارع|غابة:أشجار,حيوانات,طبيعة|ثلج:برد,شتاء,أبيض|شمس:نهار,حر,سماء|خبز:فرن,طحين,أكل|نحلة:عسل,لسعة,طيران|أسد:ملك,غابة,زئير";
+var C=raw.split('|').map(function(s){var p=s.split(':');return{w:p[0],f:p[1].split(',')}});
 var M='t',G=15,T=60,tl=60,ss=0,sb=0,sr=0,tr='b',iv,dk=[],ix=0;
-function go(id){document.querySelectorAll('.scr').forEach(function(e){e.classList.remove('act')});document.getElementById(id).classList.add('act')}
-function setM(m){M=m;document.getElementById('mT').classList.toggle('sel',m=='t');document.getElementById('mS').classList.toggle('sel',m=='s');document.getElementById('bG').style.display=(m=='t')?'block':'none'}
-function setG(g){G=g;[15,25,40].forEach(function(x){document.getElementById('g'+x).classList.toggle('sel',x==g)})}
-function setT(t){T=t;[30,60,90].forEach(function(x){document.getElementById('t'+x).classList.toggle('sel',x==t)})}
+function go(id){document.getElementById('s1').className='scr';document.getElementById('s2').className='scr';document.getElementById('s3').className='scr';document.getElementById('s4').className='scr';document.getElementById(id).className='scr act'}
+function setM(m){M=m;document.getElementById('mT').className=(m=='t')?'btn sel':'btn';document.getElementById('mS').className=(m=='s')?'btn sel':'btn';document.getElementById('bG').style.display=(m=='t')?'block':'none'}
+function setG(g){G=g;document.getElementById('g15').className=(g==15)?'btn sel':'btn';document.getElementById('g25').className=(g==25)?'btn sel':'btn';document.getElementById('g40').className=(g==40)?'btn sel':'btn'}
+function setT(t){T=t;document.getElementById('t30').className=(t==30)?'btn sel':'btn';document.getElementById('t60').className=(t==60)?'btn sel':'btn';document.getElementById('t90').className=(t==90)?'btn sel':'btn'}
 function start(){dk=C.slice().sort(function(){return Math.random()-0.5});ix=0;if(M=='s'){ss=0;document.getElementById('tBar').style.display='none';document.getElementById('gLbl').style.display='none';document.getElementById('sLbl').style.display='inline';document.getElementById('sS').innerText=0;play()}else{sb=0;sr=0;tr='b';document.getElementById('tBar').style.display='flex';document.getElementById('gLbl').style.display='inline';document.getElementById('gLbl').innerText='الهدف: '+G;document.getElementById('sLbl').style.display='none';turn()}}
 function turn(){var e=document.getElementById('tTxt');e.innerText=(tr=='b')?'🔵 دور الفريق الأزرق':'🔴 دور الفريق الأحمر';e.style.color=(tr=='b')?'#48cae4':'#ff758f';document.getElementById('pB').innerText=sb;document.getElementById('pR').innerText=sr;go('s2')}
-function play(){tl=T;document.getElementById('tmr').innerText=tl;if(M=='t'){document.getElementById('sB').innerText=sb;document.getElementById('sR').innerText=sr;document.getElementById('bB').classList.toggle('on',tr=='b');document.getElementById('bR').classList.toggle('on',tr=='r')}go('s3');card();clearInterval(iv);iv=setInterval(function(){tl--;document.getElementById('tmr').innerText=tl;if(tl<=0){clearInterval(iv);end()}},1000)}
-function card(){if(ix>=dk.length){dk=C.slice().sort(function(){return Math.random()-0.5});ix=0}var c=dk[ix];document.getElementById('wM').innerText=c.w;var h='';c.f.forEach(function(w){h+='<span class="fw">'+w+'</span>'});document.getElementById('wF').innerHTML=h}
+function play(){tl=T;document.getElementById('tmr').innerText=tl;if(M=='t'){document.getElementById('sB').innerText=sb;document.getElementById('sR').innerText=sr;document.getElementById('bB').className=(tr=='b')?'tb on':'tb';document.getElementById('bR').className=(tr=='r')?'tb on':'tb'}go('s3');card();clearInterval(iv);iv=setInterval(function(){tl--;document.getElementById('tmr').innerText=tl;if(tl<=0){clearInterval(iv);end()}},1000)}
+function card(){if(ix>=dk.length){dk=C.slice().sort(function(){return Math.random()-0.5});ix=0}var c=dk[ix];document.getElementById('wM').innerText=c.w;var h='';for(var i=0;i<c.f.length;i++){h+='<span class="fw">'+c.f[i]+'</span>'}document.getElementById('wF').innerHTML=h}
 function nxt(ok){if(ok){if(M=='s'){ss++;document.getElementById('sS').innerText=ss}else{if(tr=='b'){sb++;document.getElementById('sB').innerText=sb;if(sb>=G){clearInterval(iv);win('b');return}}else{sr++;document.getElementById('sR').innerText=sr;if(sr>=G){clearInterval(iv);win('r');return}}}}ix++;card()}
 function end(){if(M=='s'){document.getElementById('eT').innerText='انتهى الوقت!';document.getElementById('eS').innerText='نقاطك';document.getElementById('eN').innerText=ss;go('s4')}else{tr=(tr=='b')?'r':'b';turn()}}
 function win(w){document.getElementById('eT').innerText='🏆 مبروك الفوز! 🏆';document.getElementById('eS').innerText=(w=='b')?'البطل هو الفريق الأزرق':'البطل هو الفريق الأحمر';document.getElementById('eN').innerText=sb+' - '+sr;go('s4')}
