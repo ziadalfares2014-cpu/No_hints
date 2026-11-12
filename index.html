@@ -6,60 +6,164 @@
 <title>بدون تلميح</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0;font-family:sans-serif;user-select:none;-webkit-tap-highlight-color:transparent}
-  body{background:linear-gradient(135deg,#1a0b2e,#2d1452);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:15px;text-align:center}
-  button{touch-action:manipulation;cursor:pointer}
-  button:active{transform:scale(0.96)}
-  .scr{display:none;width:100%;max-width:410px;flex-direction:column;gap:14px}
+  body{background:linear-gradient(135deg,#1a0b2e,#2d1452);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px;text-align:center}
+  button{touch-action:manipulation;cursor:pointer;transition:transform 0.1s}
+  button:active{transform:scale(0.95)}
+  button:disabled{opacity:0.35;pointer-events:none}
+  .scr{display:none;width:100%;max-width:420px;flex-direction:column;gap:12px}
   .scr.act{display:flex}
-  h1{font-size:2.4rem;color:#ffd166;text-shadow:0 3px 10px rgba(0,0,0,0.4)}
-  .box{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:18px;padding:14px}
-  .row{display:flex;gap:8px;margin-top:8px}
-  .btn{flex:1;padding:11px;border-radius:12px;border:2px solid rgba(255,255,255,0.2);background:transparent;color:#fff;font-weight:700;font-size:1rem}
+  h1{font-size:2.2rem;color:#ffd166;text-shadow:0 3px 10px rgba(0,0,0,0.4)}
+  .box{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:12px}
+  .lbl{font-size:0.9rem;color:#ddd;margin-bottom:6px;font-weight:700}
+  .row{display:flex;gap:6px;flex-wrap:wrap}
+  .btn{flex:1;min-width:75px;padding:9px 6px;border-radius:11px;border:2px solid rgba(255,255,255,0.2);background:transparent;color:#fff;font-weight:700;font-size:0.92rem}
   .btn.sel{background:#ffd166;color:#1a0b2e;border-color:#ffd166}
-  .go{background:linear-gradient(90deg,#06d6a0,#00b4d8);color:#1a0b2e;border:0;padding:15px;border-radius:14px;font-size:1.25rem;font-weight:900}
-  .t-bar{display:flex;gap:10px}
-  .tb{flex:1;padding:10px;border-radius:12px;font-weight:900;opacity:0.45;border:2px solid transparent}
+  .inp{flex:1;width:48%;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,0.25);background:rgba(0,0,0,0.25);color:#fff;font-size:0.95rem;text-align:center;font-weight:700}
+  .inp::placeholder{color:#aaa}
+  .go{background:linear-gradient(90deg,#06d6a0,#00b4d8);color:#1a0b2e;border:0;padding:14px;border-radius:14px;font-size:1.15rem;font-weight:900;width:100%}
+  .t-bar{display:flex;gap:8px}
+  .tb{flex:1;padding:9px;border-radius:12px;font-weight:900;opacity:0.4;border:2px solid transparent;font-size:0.95rem}
   .tb.on{opacity:1;border-color:#ffd166}
-  .card{background:#fdf8ee;color:#1a0b2e;border-radius:24px;padding:24px 16px;box-shadow:0 12px 30px rgba(0,0,0,0.4)}
-  .fbox{background:#fce8e8;border:2px dashed #ef476f;border-radius:14px;padding:12px;margin-top:16px}
-  .fw{display:inline-block;background:#fff;color:#d90429;padding:5px 12px;border-radius:8px;margin:4px;font-weight:700;font-size:1.05rem}
+  .card{background:#fdf8ee;color:#1a0b2e;border-radius:22px;padding:20px 14px;box-shadow:0 12px 30px rgba(0,0,0,0.45);position:relative;border:4px solid transparent}
+  .card.gold{background:linear-gradient(145deg,#fff8d6,#ffe680);border-color:#ffb703}
+  .badge{display:none;background:#ffb703;color:#1a0b2e;font-size:0.8rem;font-weight:900;padding:3px 10px;border-radius:20px;margin-bottom:6px}
+  .card.gold .badge{display:inline-block}
+  .fbox{background:#fce8e8;border:2px dashed #ef476f;border-radius:14px;padding:10px;margin-top:14px}
+  .fw{display:inline-block;background:#fff;color:#d90429;padding:4px 10px;border-radius:8px;margin:3px;font-weight:700;font-size:1rem}
+  .act-row{display:flex;gap:8px}
+  .b-pass{flex:1;background:#6c757d;color:#fff;border:0;padding:13px 6px;border-radius:13px;font-weight:800;font-size:0.95rem}
+  .b-bad{flex:1;background:#ef476f;color:#fff;border:0;padding:13px 6px;border-radius:13px;font-weight:800;font-size:0.95rem}
+  .b-ok{flex:1.3;background:#06d6a0;color:#1a0b2e;border:0;padding:13px 6px;border-radius:13px;font-weight:900;font-size:1.05rem}
+  .tmr-warn{color:#ef476f !important;animation:pulse 0.6s infinite alternate}
+  @keyframes pulse{from{transform:scale(1)}to{transform:scale(1.18)}}
 </style>
 </head>
 <body>
 <div id="s1" class="scr act">
-  <h1>بدون تلميح</h1>
-  <div class="box"><div>نظام اللعب</div><div class="row"><button class="btn sel" id="mT" onclick="setM('t')">تحدي الفريقين ⚔️</button><button class="btn" id="mS" onclick="setM('s')">لعب حر 👤</button></div></div>
-  <div class="box" id="bG"><div>نقاط الفوز</div><div class="row"><button class="btn sel" id="g15" onclick="setG(15)">15</button><button class="btn" id="g25" onclick="setG(25)">25</button><button class="btn" id="g40" onclick="setG(40)">40</button></div></div>
-  <div class="box"><div>مدة الجولة (ثانية)</div><div class="row"><button class="btn" id="t30" onclick="setT(30)">30</button><button class="btn sel" id="t60" onclick="setT(60)">60</button><button class="btn" id="t90" onclick="setT(90)">90</button></div></div>
+  <h1>بدون تلميح 🎭</h1>
+  <div class="box">
+    <div class="lbl">نظام اللعب</div>
+    <div class="row">
+      <button class="btn sel" id="mT" onclick="setM('t')">تحدي الفريقين ⚔️</button>
+      <button class="btn" id="mS" onclick="setM('s')">لعب حر 👤</button>
+    </div>
+    <div class="row" id="namesBox" style="margin-top:8px">
+      <input class="inp" id="inB" type="text" placeholder="اسم الفريق الأول" maxlength="14">
+      <input class="inp" id="inR" type="text" placeholder="اسم الفريق الثاني" maxlength="14">
+    </div>
+  </div>
+  <div class="box">
+    <div class="lbl">تصنيف الكلمات</div>
+    <div class="row">
+      <button class="btn sel" id="cAll" onclick="setC('all')">شامل 🌍</button>
+      <button class="btn" id="cFood" onclick="setC('food')">أكلات 🍔</button>
+      <button class="btn" id="cSport" onclick="setC('sport')">رياضة ⚽</button>
+      <button class="btn" id="cMedia" onclick="setC('media')">أفلام 🎬</button>
+      <button class="btn" id="cLife" onclick="setC('life')">أشياء 💡</button>
+    </div>
+  </div>
+  <div class="box" id="bG">
+    <div class="lbl">نقاط الفوز</div>
+    <div class="row">
+      <button class="btn sel" id="g15" onclick="setG(15)">15</button>
+      <button class="btn" id="g25" onclick="setG(25)">25</button>
+      <button class="btn" id="g40" onclick="setG(40)">40</button>
+    </div>
+  </div>
+  <div class="box">
+    <div class="lbl">مدة الجولة (ثانية)</div>
+    <div class="row">
+      <button class="btn" id="t30" onclick="setT(30)">30</button>
+      <button class="btn sel" id="t60" onclick="setT(60)">60</button>
+      <button class="btn" id="t90" onclick="setT(90)">90</button>
+    </div>
+  </div>
   <button class="go" onclick="start()">ابدأ اللعب الآن 🚀</button>
 </div>
 <div id="s2" class="scr">
-  <h1 id="tTxt">🔵 دور الفريق الأزرق</h1>
-  <div class="box"><p style="font-size:1.2rem">الأزرق: <b id="pB">0</b> | الأحمر: <b id="pR">0</b></p><p style="color:#ffd166;margin-top:10px">سلّم الهاتف للاعب الذي سيشرح الكلمة</p></div>
+  <h1 id="tTxt">🔵 دور الفريق الأول</h1>
+  <div class="box">
+    <p style="font-size:1.15rem"><span id="lblB1">الأزرق</span>: <b id="pB">0</b> &nbsp;|&nbsp; <span id="lblR1">الأحمر</span>: <b id="pR">0</b></p>
+    <p style="color:#ffd166;margin-top:10px;font-size:0.95rem">سلّم الهاتف للاعب الذي سيشرح الكلمة</p>
+  </div>
   <button class="go" onclick="play()">ابدأ المؤقت ⏱️</button>
 </div>
 <div id="s3" class="scr">
-  <div class="t-bar" id="tBar"><div class="tb on" id="bB" style="background:#00b4d833;color:#48cae4">🔵 الأزرق: <span id="sB">0</span></div><div class="tb" id="bR" style="background:#ef476f33;color:#ff758f">🔴 الأحمر: <span id="sR">0</span></div></div>
-  <div class="box" style="display:flex;justify-content:space-between;align-items:center"><span id="gLbl" style="color:#ffd166;font-weight:700">الهدف: 15</span><span id="sLbl" style="display:none">النقاط: <b id="sS">0</b></span><b id="tmr" style="font-size:1.9rem;color:#ffd166">60</b></div>
-  <div class="card"><div style="color:#888;font-size:0.85rem">✦ الكلمة المطلوبة ✦</div><div id="wM" style="font-size:2.5rem;font-weight:900;margin:10px 0">قهوة</div><div class="fbox"><div style="color:#ef476f;font-size:0.85rem;font-weight:700">🚫 ممنوع تقول</div><div id="wF"></div></div></div>
-  <div class="row"><button class="go" style="background:#ef476f;color:#fff" onclick="nxt(0)">تخطي ✖</button><button class="go" onclick="nxt(1)">صحيحة ✔ (+1)</button></div>
+  <div class="t-bar" id="tBar">
+    <div class="tb on" id="bB" style="background:#00b4d833;color:#48cae4">🔵 <span id="lblB2">الأزرق</span>: <span id="sB">0</span></div>
+    <div class="tb" id="bR" style="background:#ef476f33;color:#ff758f">🔴 <span id="lblR2">الأحمر</span>: <span id="sR">0</span></div>
+  </div>
+  <div class="box" style="display:flex;justify-content:space-between;align-items:center;padding:8px 14px">
+    <span id="gLbl" style="color:#ffd166;font-weight:700;font-size:0.95rem">الهدف: 15</span>
+    <span id="sLbl" style="display:none;font-weight:700">النقاط: <b id="sS">0</b></span>
+    <b id="tmr" style="font-size:1.85rem;color:#ffd166">60</b>
+  </div>
+  <div class="card" id="wCard">
+    <div class="badge">⭐ بطاقة ذهبية (نقطتان +2) ⭐</div>
+    <div style="color:#777;font-size:0.8rem">✦ الكلمة المطلوبة ✦</div>
+    <div id="wM" style="font-size:2.3rem;font-weight:900;margin:8px 0">قهوة</div>
+    <div class="fbox">
+      <div style="color:#ef476f;font-size:0.82rem;font-weight:700">🚫 ممنوع تقول</div>
+      <div id="wF"></div>
+    </div>
+  </div>
+  <div class="act-row">
+    <button class="b-pass" id="btnPass" onclick="doPass()">تخطي (3)</button>
+    <button class="b-bad" onclick="nxt(-1)">ممنوعة (-1)</button>
+    <button class="b-ok" id="btnOk" onclick="nxt(1)">صحيحة (+1)</button>
+  </div>
 </div>
 <div id="s4" class="scr">
   <h1 id="eT">انتهى الوقت!</h1>
-  <div class="box"><p id="eS">النتيجة</p><h1 id="eN" style="font-size:3.2rem;color:#06d6a0;margin-top:8px">0</h1></div>
+  <div class="box">
+    <p id="eS" style="color:#ddd">النتيجة</p>
+    <h1 id="eN" style="font-size:2.8rem;color:#06d6a0;margin-top:8px">0</h1>
+  </div>
   <button class="go" onclick="go('s1')">العب مجدداً 🔄</button>
 </div>
 <script>
-var raw = `قهوة:فنجان,كافيين,صباح|شمس:سماء,نور,حرارة|قمر:ليل,نجوم,بدر|بحر:ماء,مالح,سمك|جبل:عالي,قمة,صخور|سيارة:عجلات,قيادة,شارع|هاتف:اتصال,شاشة,تطبيق|كتاب:قراءة,ورق,مكتبة|ساعة:وقت,عقارب,يد|مفتاح:باب,قفل,فتح|نظارة:عين,رؤية,شمس|حذاء:قدم,مشي,رباط|سرير:نوم,وسادة,غرفة|ثلاجة:بارد,طعام,مطبخ|تلفاز:شاشة,قنوات,ريموت|طائرة:سفر,سماء,مطار|قطار:سكة,محطة,سريع|كرة قدم:ملعب,هدف,حارس|طبيب:مستشفى,مريض,علاج|معلم:مدرسة,طالب,سبورة|فيل:خرطوم,كبير,أنياب|زرافة:رقبة,طويلة,بقع|بطريق:ثلج,طائر,أبيض|تمساح:نهر,أسنان,أخضر|برجر:لحم,خبز,مطعم|موز:أصفر,قرد,فاكهة|تفاح:أحمر,شجرة,نيوتن|فراولة:أحمر,بذور,مربى|ليمون:حامض,أصفر,عصير|بصل:دموع,طبخ,رائحة|بطاطس:قلي,شيبس,أرض|إطفائي:نار,ماء,حريق|مهندس:بناء,تصميم,خوذة|طيار:طائرة,سماء,قيادة|حلاق:شعر,مقص,مشط|خياط:قماش,إبرة,ملابس|ميكانيكي:سيارة,تصليح,محرك|صيدلي:دواء,وصفة,علاج|شاحن:كهرباء,سلك,هاتف|مكيف:برد,صيف,هواء|غسالة:ملابس,ماء,تنظيف|مكنسة:غبار,تنظيف,أرض|مكواة:ملابس,حرارة,فرد|فرشاة أسنان:معجون,فم,تنظيف|منشفة:ماء,تجفيف,حمام|عطر:رائحة,زجاجة,رش|محفظة:نقود,بطاقة,جيب|علم:دولة,ألوان,سارية|خريطة:دول,اتجاهات,موقع|بوصلة:شمال,جنوب,اتجاه|تلسكوب:نجوم,فضاء,رؤية|مجهر:صغير,مختبر,تكبير|سلم:صعود,درج,ارتفاع|مصعد:عمارة,زر,طوابق|إشارة مرور:أحمر,أخضر,سيارات|وقود:بنزين,سيارة,محطة|عجلة:دائرية,سيارة,مطاط`;
+var db = {
+  food: "قهوة:فنجان,كافيين,صباح|شاي:أحمر,نعناع,سكر,كوب|برجر:لحم,خبز,مطعم,جبن|بيتزا:عجين,جبن,إيطاليا,دائرية|شاورما:دجاج,ثوم,سيخ,سندويش|كبسة:أرز,دجاج,سعودية,بهارات|ملوخية:خضراء,ورق,أرز,ثوم|فلافل:حمص,قلي,فول,فطور|موز:أصفر,قرد,فاكهة,قشر|تفاح:أحمر,شجرة,نيوتن,آيفون|فراولة:أحمر,بذور,مربى,صيف|ليمون:حامض,أصفر,عصير,فيتامين|بطيخ:أحمر,صيف,بذور,ماء|بصل:دموع,طبخ,رائحة,حلقات|بطاطس:قلي,شيبس,أرض,كاتشب|عسل:نحل,حلو,خلية,شفاء|شوكولاتة:كاكاو,حلو,حليب,سويسرا|آيس كريم:بارد,صيف,مثلجات,نكهات|كنافة:جبن,قطر,حلويات,نابلس|تمر:نخيل,رمضان,بلح,سكر|زيتون:شجرة,أخضر,أسود,زيت|بيض:دجاج,فطور,قلي,سلق|جبن:حليب,فأر,أبيض,سندويش|ماء:شرب,حياة,نهر,عطش|عصير:فواكه,شرب,بارد,برتقال|خبز:دقيق,فرن,قمح,رغيف|ملح:بحر,أبيض,طعام,مالح|سكر:حلو,شاي,قصب,أبيض|سمك:بحر,صيد,شوك,سباحة|دجاج:ريش,بيض,طائر,شوي",
+  sport: "كرة قدم:ملعب,هدف,حارس,مباراة|كرة سلة:طويل,رمية,شبكة,أمريكا|تنس:مضرب,شبكة,كرة,صفراء|سباحة:ماء,مسبح,غوص,بحر|ملاكمة:قفازات,حلبة,لكمة,وزن|كاراتيه:حزام,قتال,يابان,دفاع|ركض:جري,سريع,سباق,ماراثون|دراجة:عجلتين,بدال,خوذة,ركوب|تزلج:ثلج,جبل,شتاء,لوح|شطرنج:ملك,وزير,رقعة,ذكاء|بلوت:ورق,أوراق,لعب,قيد|بلايستيشن:ألعاب,يد,سوني,تلفاز|كأس العالم:بطولة,منتخبات,ذهب,فيفا|ميسي:أرجنتين,برشلونة,كرة,أسطورة|رونالدو:برتغال,ريال مدريد,نصر,هدف|حكم:صافرة,بطاقة حمراء,ملعب,قانون|تسلل:خط,مهاجم,راية,هدف|ركلة جزاء:حارس,نقطة,مرمى,خطأ|جمهور:تشجيع,مدرجات,ملعب,صراخ|نادي:فريق,مدرب,لاعبين,شعار|أولمبياد:ميدالية,ذهب,ألعاب,شعلة|جولف:حفرة,عصا,عشب,كرة صغيرة|مصارعة:حلبة,قوة,قتال,حزام|بلياردو:عصا,كرات,طاولة,حفر|رمي السهام:هدف,قوس,تركيز,نقطة|تسلق:جبل,حبل,قمة,ارتفاع|رفع أثقال:حديد,عضلات,قوة,نادي|يوغا:تأمل,استرخاء,تنفس,مرونة|ماراثون:جري,مسافة,طويل,سباق|مدرب:خطة,تبديل,فريق,توجيه",
+  media: "توم وجيري:قط,فأر,كرتون,مطاردة|سبونج بوب:بحر,أصفر,إسفنج,برجر|باب الحارة:شام,مسلسل,أبو عصام,قديم|طاش ما طاش:سعودية,كوميديا,ناصر,عبدالله|باتمان:خفاش,ليل,جوكر,بطل|سبايدرمان:عنكبوت,شبكة,تسلق,بطل|سوبرمان:طيران,قوة,أحمر,أزرق|هاري بوتر:سحر,عصا,مدرسة,نظارة|تايتانيك:سفينة,غرق,جبل جليد,حب|الأسد الملك:سيمبا,غابة,أب,كرتون|كونان:محقق,صغير,جريمة,نظارة|ناروتو:نينجا,أنمي,يابان,شهاب|ون بيس:قرصان,لوفي,كنز,بحر|دراغون بول:غوكو,قتال,كرات,أنمي|مستر بين:صامت,كوميديا,دب,بريطانيا|شارلي شابلن:أبيض وأسود,صامت,قبعة,كوميديا|أفنجرز:أبطال,مارفل,ثانوس,خارقين|جوكر:مهرج,شرير,ضحكة,باتمان|فروزن:ثلج,إلسا,ملكة,برد|علاء الدين:مصباح,جني,بساط,ياسمين|سندريلا:حذاء,أمير,ساعة 12,قصر|بينوكيو:خشب,أنف,كذب,دمية|يوتيوب:فيديو,اشتراك,قناة,مشاهدة|نتفليكس:أفلام,مسلسلات,اشتراك,شاشة|تيك توك:فيديو قصير,رقص,ترند,تطبيق|أوسكار:جائزة,سينما,تمثال,أفلام|مخرج:كاميرا,تصوير,أكشن,فيلم|ممثل:دور,مسرح,سينما,شهرة|سينما:شاشة كبيرة,فشار,ظلام,تذكرة|كوميديا:ضحك,نكتة,مسرحية,مرح",
+  life: "شمس:سماء,نور,حرارة,نهار|قمر:ليل,نجوم,بدر,سماء|بحر:ماء,مالح,أمواج,شاطئ|جبل:عالي,قمة,صخور,تسلق|سيارة:عجلات,قيادة,شارع,محرك|هاتف:اتصال,شاشة,تطبيق,جوال|كتاب:قراءة,ورق,مكتبة,صفحات|ساعة:وقت,عقارب,يد,دقائق|مفتاح:باب,قفل,فتح,حديد|نظارة:عين,رؤية,شمس,عدسات|حذاء:قدم,مشي,رباط,لبس|سرير:نوم,وسادة,غرفة,راحة|ثلاجة:بارد,طعام,مطبخ,تجميد|تلفاز:شاشة,قنوات,ريموت,مشاهدة|طائرة:سفر,سماء,مطار,أجنحة|قطار:سكة,محطة,سريع,عربات|طبيب:مستشفى,مريض,علاج,سماعة|معلم:مدرسة,طالب,سبورة,درس|فيل:خرطوم,كبير,أنياب,غابة|زرافة:رقبة,طويلة,بقع,حيوان|بطريق:ثلج,طائر,أبيض,أسود|تمساح:نهر,أسنان,أخضر,مفترس|إطفائي:نار,ماء,حريق,خوذة|مهندس:بناء,تصميم,خوذة,مخطط|طيار:طائرة,سماء,قيادة,كابتن|حلاق:شعر,مقص,مشط,صالون|خياط:قماش,إبرة,ملابس,تفصيل|ميكانيكي:سيارة,تصليح,محرك,ورشة|صيدلي:دواء,وصفة,علاج,حبوب|شاحن:كهرباء,سلك,هاتف,بطارية|مكيف:برد,صيف,هواء,ريموت|غسالة:ملابس,ماء,تنظيف,صابون|مكنسة:غبار,تنظيف,أرض,كهرباء|مكواة:ملابس,حرارة,فرد,بخار|فرشاة أسنان:معجون,فم,تنظيف,صباح|منشفة:ماء,تجفيف,حمام,قطن|عطر:رائحة,زجاجة,رش,جميل|محفظة:نقود,بطاقة,جيب,جلد|علم:دولة,ألوان,سارية,وطن|خريطة:دول,اتجاهات,موقع,كنز|بوصلة:شمال,جنوب,اتجاه,إبرة|تلسكوب:نجوم,فضاء,رؤية,بعيد|مجهر:صغير,مختبر,تكبير,خلايا|سلم:صعود,درج,ارتفاع,نزول|مصعد:عمارة,زر,طوابق,صعود|إشارة مرور:أحمر,أخضر,سيارات,تقاطع|وقود:بنزين,سيارة,محطة,تعبئة|عجلة:دائرية,سيارة,مطاط,إطار|مظلة:مطر,شتاء,ماء,حماية|مرآة:وجه,انعكاس,زجاج,رؤية"
+};
 
-var words = raw.trim().split('|').filter(Boolean).map(function(item) {
-  var parts = item.split(':');
-  return { w: parts[0].trim(), f: parts[1] ? parts[1].split(',') : [] };
-});
+var audioCtx = null;
+function beep(freq, type, dur, vol) {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    var osc = audioCtx.createOscillator();
+    var gain = audioCtx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol || 0.15, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + dur);
+  } catch (e) {}
+}
 
-var mode = 't', goal = 15, timeSet = 60;
+function vib(ms) {
+  try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {}
+}
+
+function playSound(kind) {
+  if (kind === 'ok') { beep(587, 'sine', 0.12, 0.2); setTimeout(function(){ beep(880, 'sine', 0.2, 0.2); }, 90); vib(40); }
+  else if (kind === 'bad') { beep(180, 'sawtooth', 0.25, 0.2); vib(150); }
+  else if (kind === 'pass') { beep(350, 'triangle', 0.12, 0.15); vib(25); }
+  else if (kind === 'tick') { beep(750, 'sine', 0.05, 0.1); }
+  else if (kind === 'end') { beep(300, 'square', 0.4, 0.2); setTimeout(function(){ beep(220, 'square', 0.5, 0.2); }, 250); vib(300); }
+  else if (kind === 'win') { beep(523, 'sine', 0.15, 0.2); setTimeout(function(){ beep(659, 'sine', 0.15, 0.2); }, 120); setTimeout(function(){ beep(784, 'sine', 0.35, 0.25); }, 240); vib(200); }
+}
+ var mode = 't', cat = 'all', goal = 15, timeSet = 60;
+var nameB = 'الأزرق', nameR = 'الأحمر';
 var scoreB = 0, scoreR = 0, scoreS = 0, turn = 'B';
-var timer = null, timeLeft = 60, used = [];
+var timer = null, timeLeft = 60, used = [], words = [];
+var passesLeft = 3, isGold = false, cardCount = 0;
 
 function go(id) {
   document.querySelectorAll('.scr').forEach(function(s) { s.classList.remove('act'); });
@@ -71,6 +175,14 @@ function setM(m) {
   document.getElementById('mT').classList.toggle('sel', m === 't');
   document.getElementById('mS').classList.toggle('sel', m === 's');
   document.getElementById('bG').style.display = (m === 't') ? 'block' : 'none';
+  document.getElementById('namesBox').style.display = (m === 't') ? 'flex' : 'none';
+}
+
+function setC(c) {
+  cat = c;
+  ['All', 'Food', 'Sport', 'Media', 'Life'].forEach(function(x) {
+    document.getElementById('c' + x).classList.toggle('sel', x.toLowerCase() === c);
+  });
 }
 
 function setG(g) {
@@ -87,8 +199,32 @@ function setT(t) {
   });
 }
 
+function buildWords() {
+  var rawStr = '';
+  if (cat === 'all') {
+    rawStr = db.food + '|' + db.sport + '|' + db.media + '|' + db.life;
+  } else {
+    rawStr = db[cat];
+  }
+  words = rawStr.trim().split('|').filter(Boolean).map(function(item) {
+    var parts = item.split(':');
+    return { w: parts[0].trim(), f: parts[1] ? parts[1].split(',') : [] };
+  });
+}
+
 function start() {
-  scoreB = 0; scoreR = 0; scoreS = 0; turn = 'B'; used = [];
+  var bVal = document.getElementById('inB').value.trim();
+  var rVal = document.getElementById('inR').value.trim();
+  nameB = bVal || 'الأزرق';
+  nameR = rVal || 'الأحمر';
+  document.getElementById('lblB1').innerText = nameB;
+  document.getElementById('lblR1').innerText = nameR;
+  document.getElementById('lblB2').innerText = nameB;
+  document.getElementById('lblR2').innerText = nameR;
+
+  buildWords();
+  scoreB = 0; scoreR = 0; scoreS = 0; turn = 'B'; used = []; cardCount = 0;
+  playSound('pass');
   if (mode === 't') {
     prepTurn();
   } else {
@@ -97,7 +233,7 @@ function start() {
 }
 
 function prepTurn() {
-  document.getElementById('tTxt').innerText = (turn === 'B') ? '🔵 دور الفريق الأزرق' : '🔴 دور الفريق الأحمر';
+  document.getElementById('tTxt').innerText = (turn === 'B') ? ('🔵 دور ' + nameB) : ('🔴 دور ' + nameR);
   document.getElementById('pB').innerText = scoreB;
   document.getElementById('pR').innerText = scoreR;
   go('s2');
@@ -105,23 +241,50 @@ function prepTurn() {
 
 function play() {
   timeLeft = timeSet;
-  document.getElementById('tmr').innerText = timeLeft;
+  passesLeft = 3;
+  updatePassBtn();
+  var tmrEl = document.getElementById('tmr');
+  tmrEl.innerText = timeLeft;
+  tmrEl.classList.remove('tmr-warn');
+
   document.getElementById('tBar').style.display = (mode === 't') ? 'flex' : 'none';
   document.getElementById('gLbl').style.display = (mode === 't') ? 'inline' : 'none';
   document.getElementById('gLbl').innerText = 'الهدف: ' + goal;
   document.getElementById('sLbl').style.display = (mode === 's') ? 'inline' : 'none';
+  
   updateScores();
   nextWord();
   go('s3');
   clearInterval(timer);
   timer = setInterval(function() {
     timeLeft--;
-    document.getElementById('tmr').innerText = timeLeft;
+    tmrEl.innerText = timeLeft;
+    if (timeLeft <= 10 && timeLeft > 0) {
+      tmrEl.classList.add('tmr-warn');
+      playSound('tick');
+    }
     if (timeLeft <= 0) {
       clearInterval(timer);
+      tmrEl.classList.remove('tmr-warn');
+      playSound('end');
       endRound();
     }
   }, 1000);
+}
+
+function updatePassBtn() {
+  var btn = document.getElementById('btnPass');
+  btn.innerText = 'تخطي (' + passesLeft + ')';
+  btn.disabled = (passesLeft <= 0);
+}
+
+function doPass() {
+  if (passesLeft > 0) {
+    passesLeft--;
+    updatePassBtn();
+    playSound('pass');
+    nextWord();
+  }
 }
 
 function updateScores() {
@@ -139,6 +302,12 @@ function nextWord() {
     idx = Math.floor(Math.random() * words.length);
   } while (used.indexOf(idx) !== -1);
   used.push(idx);
+  cardCount++;
+
+  isGold = (cardCount % 5 === 0);
+  document.getElementById('wCard').classList.toggle('gold', isGold);
+  document.getElementById('btnOk').innerText = isGold ? 'صحيحة (+2) ⭐' : 'صحيحة (+1)';
+
   var item = words[idx];
   document.getElementById('wM').innerText = item.w;
   var fHtml = '';
@@ -148,20 +317,29 @@ function nextWord() {
   document.getElementById('wF').innerHTML = fHtml;
 }
 
-function nxt(ok) {
-  if (ok) {
-    if (mode === 't') {
-      if (turn === 'B') scoreB++; else scoreR++;
-      updateScores();
-      if (scoreB >= goal || scoreR >= goal) {
-        clearInterval(timer);
-        showWinner();
-        return;
-      }
-    } else {
-      scoreS++;
-      updateScores();
+function nxt(dir) {
+  var pts = 0;
+  if (dir === 1) {
+    pts = isGold ? 2 : 1;
+    playSound('ok');
+  } else if (dir === -1) {
+    pts = -1;
+    playSound('bad');
+  }
+
+  if (mode === 't') {
+    if (turn === 'B') scoreB = Math.max(0, scoreB + pts);
+    else scoreR = Math.max(0, scoreR + pts);
+    updateScores();
+    if (scoreB >= goal || scoreR >= goal) {
+      clearInterval(timer);
+      playSound('win');
+      showWinner();
+      return;
     }
+  } else {
+    scoreS = Math.max(0, scoreS + pts);
+    updateScores();
   }
   nextWord();
 }
@@ -179,7 +357,7 @@ function endRound() {
 }
 
 function showWinner() {
-  var winTeam = (scoreB >= goal) ? '🔵 فاز الفريق الأزرق!' : '🔴 فاز الفريق الأحمر!';
+  var winTeam = (scoreB >= goal) ? ('🔵 فاز ' + nameB + '!') : ('🔴 فاز ' + nameR + '!');
   document.getElementById('eT').innerText = winTeam;
   document.getElementById('eS').innerText = 'النتيجة النهائية';
   document.getElementById('eN').innerText = scoreB + ' - ' + scoreR;
