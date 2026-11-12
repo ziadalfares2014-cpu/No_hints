@@ -2,11 +2,13 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>بدون تلميح</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;font-family:sans-serif;user-select:none}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:sans-serif;user-select:none;-webkit-tap-highlight-color:transparent}
   body{background:linear-gradient(135deg,#1a0b2e,#2d1452);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:15px;text-align:center}
+  button{touch-action:manipulation;cursor:pointer}
+  button:active{transform:scale(0.96)}
   .scr{display:none;width:100%;max-width:410px;flex-direction:column;gap:14px}
   .scr.act{display:flex}
   h1{font-size:2.4rem;color:#ffd166;text-shadow:0 3px 10px rgba(0,0,0,0.4)}
@@ -48,22 +50,141 @@
   <button class="go" onclick="go('s1')">العب مجدداً 🔄</button>
 </div>
 <script>
-var raw="
-|فيل:خرطوم,كبير,أنياب|زرافة:رقبة,طويلة,بقع|بطريق:ثلج,طائر,أبيض|تمساح:نهر,أسنان,أخضر|برجر:لحم,خبز,مطعم|موز:أصفر,قرد,فاكهة|تفاح:أحمر,شجرة,نيوتن|فراولة:أحمر,بذور,مربى|ليمون:حامض,أصفر,عصير|بصل:دموع,طبخ,رائحة|بطاطس:قلي,شيبس,أرض|إطفائي:نار,ماء,حريق|مهندس:بناء,تصميم,خوذة|طيار:طائرة,سماء,قيادة|حلاق:شعر,مقص,مشط|خياط:قماش,إبرة,ملابس|ميكانيكي:سيارة,تصليح,محرك|صيدلي:دواء,وصفة,علاج|شاحن:كهرباء,سلك,هاتف|مكيف:برد,صيف,هواء|غسالة:ملابس,ماء,تنظيف|مكنسة:غبار,تنظيف,أرض|مكواة:ملابس,حرارة,فرد|فرشاة أسنان:معجون,فم,تنظيف|منشفة:ماء,تجفيف,حمام|عطر:رائحة,زجاجة,رش|محفظة:نقود,بطاقة,جيب|علم:دولة,ألوان,سارية|خريطة:دول,اتجاهات,موقع|بوصلة:شمال,جنوب,اتجاه|تلسكوب:نجوم,فضاء,رؤية|مجهر:صغير,مختبر,تكبير|سلم:صعود,درج,ارتفاع|مصعد:عمارة,زر,طوابق|إشارة مرور:أحمر,أخضر,سيارات|وقود:بنزين,سيارة,محطة|عجلة:دائرية,سيارة,مطاط|قارب:بحر,مجداف,صغير|صاروخ:فضاء,قمر,انطلاق|رائد فضاء:قمر,بدلة,جاذبية|تاج:ملك,رأس,ذهب|جمل:صحراء,سنام,سفينة|حصان:ركوب,سباق,صهيل|دولفين:بحر,ذكي,سباحة|ببغاء:طائر,كلام,ألوان|خفاش:ليل,كهف,طيران|نملة:صغيرة,سكر,عمل|سجادة:أرض,غرفة,صوف|مطبخ:طبخ,طعام,فرن|ملعب:كرة,جمهور,مباراة|مطار:طائرة,سفر,حقائب
- قهوة:صباح,فنجان,كافيين|شاورما:دجاج,لحم,ثوم|طائرة:سماء,مطار,سفر|كرة القدم:ملعب,هدف,ميسي|بطارية:شحن,هاتف,طاقة|ثلاجة:برد,طعام,مطبخ|مظلة:مطر,شتاء,ماء|نظارة:عين,شمس,رؤية|مفتاح:باب,قفل,فتح|وسادة:نوم,سرير,رأس|طبيب:مستشفى,مريض,علاج|بحر:سباحة,ماء,شاطئ|صحراء:رمل,جمل,حر|جواز سفر:مطار,دولة,تأشيرة|كاميرا:تصوير,صورة,فيديو|ساعة:وقت,يد,دقيقة|كتاب:قراءة,ورق,صفحة|عسل:نحل,حلو,فطور|مرآة:وجه,انعكاس,زجاج|قطار:سكة,محطة,سريع|مقص:قص,ورق,شعر|قمر:ليل,سماء,نجوم|خاتم:إصبع,زواج,ذهب|بطيخ:صيف,أحمر,بذور|بيتزا:جبن,إيطاليا,دائرية|فلافل:حمص,زيت,فطور|كنافة:جبن,قطر,حلويات|شرطي:قانون,لص,سيارة|سماعات:أذن,صوت,موسيقى|هرم:مصر,فراعنة,مثلث|بركان:نار,جبل,حمم|صابون:غسيل,يد,رغوة|جسر:نهر,عبور,سيارات|مصباح:ضوء,كهرباء,ظلام|حقيبة:مدرسة,سفر,أغراض|شوكولاتة:حلو,كاكاو,سكر|سفينة:بحر,ماء,إبحار|مروحة:هواء,صيف,حر|شمعة:نار,ضوء,عيد|حديقة:شجر,زهور,لعب|مدرسة:طلاب,معلم,صف|تلفاز:شاشة,قنوات,مشاهدة|كمبيوتر:شاشة,إنترنت,لوحة|دراجة:عجلتين,ركوب,شارع|غابة:أشجار,حيوانات,طبيعة|ثلج:برد,شتاء,أبيض|شمس:نهار,حر,سماء|خبز:فرن,طحين,أكل|نحلة:عسل,لسعة,طيران|أسد:ملك,غابة,زئير";
-var C=raw.split('|').map(function(s){var p=s.split(':');return{w:p[0],f:p[1].split(',')}});
-var M='t',G=15,T=60,tl=60,ss=0,sb=0,sr=0,tr='b',iv,dk=[],ix=0;
-function go(id){document.getElementById('s1').className='scr';document.getElementById('s2').className='scr';document.getElementById('s3').className='scr';document.getElementById('s4').className='scr';document.getElementById(id).className='scr act'}
-function setM(m){M=m;document.getElementById('mT').className=(m=='t')?'btn sel':'btn';document.getElementById('mS').className=(m=='s')?'btn sel':'btn';document.getElementById('bG').style.display=(m=='t')?'block':'none'}
-function setG(g){G=g;document.getElementById('g15').className=(g==15)?'btn sel':'btn';document.getElementById('g25').className=(g==25)?'btn sel':'btn';document.getElementById('g40').className=(g==40)?'btn sel':'btn'}
-function setT(t){T=t;document.getElementById('t30').className=(t==30)?'btn sel':'btn';document.getElementById('t60').className=(t==60)?'btn sel':'btn';document.getElementById('t90').className=(t==90)?'btn sel':'btn'}
-function start(){dk=C.slice().sort(function(){return Math.random()-0.5});ix=0;if(M=='s'){ss=0;document.getElementById('tBar').style.display='none';document.getElementById('gLbl').style.display='none';document.getElementById('sLbl').style.display='inline';document.getElementById('sS').innerText=0;play()}else{sb=0;sr=0;tr='b';document.getElementById('tBar').style.display='flex';document.getElementById('gLbl').style.display='inline';document.getElementById('gLbl').innerText='الهدف: '+G;document.getElementById('sLbl').style.display='none';turn()}}
-function turn(){var e=document.getElementById('tTxt');e.innerText=(tr=='b')?'🔵 دور الفريق الأزرق':'🔴 دور الفريق الأحمر';e.style.color=(tr=='b')?'#48cae4':'#ff758f';document.getElementById('pB').innerText=sb;document.getElementById('pR').innerText=sr;go('s2')}
-function play(){tl=T;document.getElementById('tmr').innerText=tl;if(M=='t'){document.getElementById('sB').innerText=sb;document.getElementById('sR').innerText=sr;document.getElementById('bB').className=(tr=='b')?'tb on':'tb';document.getElementById('bR').className=(tr=='r')?'tb on':'tb'}go('s3');card();clearInterval(iv);iv=setInterval(function(){tl--;document.getElementById('tmr').innerText=tl;if(tl<=0){clearInterval(iv);end()}},1000)}
-function card(){if(ix>=dk.length){dk=C.slice().sort(function(){return Math.random()-0.5});ix=0}var c=dk[ix];document.getElementById('wM').innerText=c.w;var h='';for(var i=0;i<c.f.length;i++){h+='<span class="fw">'+c.f[i]+'</span>'}document.getElementById('wF').innerHTML=h}
-function nxt(ok){if(ok){if(M=='s'){ss++;document.getElementById('sS').innerText=ss}else{if(tr=='b'){sb++;document.getElementById('sB').innerText=sb;if(sb>=G){clearInterval(iv);win('b');return}}else{sr++;document.getElementById('sR').innerText=sr;if(sr>=G){clearInterval(iv);win('r');return}}}}ix++;card()}
-function end(){if(M=='s'){document.getElementById('eT').innerText='انتهى الوقت!';document.getElementById('eS').innerText='نقاطك';document.getElementById('eN').innerText=ss;go('s4')}else{tr=(tr=='b')?'r':'b';turn()}}
-function win(w){document.getElementById('eT').innerText='🏆 مبروك الفوز! 🏆';document.getElementById('eS').innerText=(w=='b')?'البطل هو الفريق الأزرق':'البطل هو الفريق الأحمر';document.getElementById('eN').innerText=sb+' - '+sr;go('s4')}
+var raw = `قهوة:فنجان,كافيين,صباح|شمس:سماء,نور,حرارة|قمر:ليل,نجوم,بدر|بحر:ماء,مالح,سمك|جبل:عالي,قمة,صخور|سيارة:عجلات,قيادة,شارع|هاتف:اتصال,شاشة,تطبيق|كتاب:قراءة,ورق,مكتبة|ساعة:وقت,عقارب,يد|مفتاح:باب,قفل,فتح|نظارة:عين,رؤية,شمس|حذاء:قدم,مشي,رباط|سرير:نوم,وسادة,غرفة|ثلاجة:بارد,طعام,مطبخ|تلفاز:شاشة,قنوات,ريموت|طائرة:سفر,سماء,مطار|قطار:سكة,محطة,سريع|كرة قدم:ملعب,هدف,حارس|طبيب:مستشفى,مريض,علاج|معلم:مدرسة,طالب,سبورة|فيل:خرطوم,كبير,أنياب|زرافة:رقبة,طويلة,بقع|بطريق:ثلج,طائر,أبيض|تمساح:نهر,أسنان,أخضر|برجر:لحم,خبز,مطعم|موز:أصفر,قرد,فاكهة|تفاح:أحمر,شجرة,نيوتن|فراولة:أحمر,بذور,مربى|ليمون:حامض,أصفر,عصير|بصل:دموع,طبخ,رائحة|بطاطس:قلي,شيبس,أرض|إطفائي:نار,ماء,حريق|مهندس:بناء,تصميم,خوذة|طيار:طائرة,سماء,قيادة|حلاق:شعر,مقص,مشط|خياط:قماش,إبرة,ملابس|ميكانيكي:سيارة,تصليح,محرك|صيدلي:دواء,وصفة,علاج|شاحن:كهرباء,سلك,هاتف|مكيف:برد,صيف,هواء|غسالة:ملابس,ماء,تنظيف|مكنسة:غبار,تنظيف,أرض|مكواة:ملابس,حرارة,فرد|فرشاة أسنان:معجون,فم,تنظيف|منشفة:ماء,تجفيف,حمام|عطر:رائحة,زجاجة,رش|محفظة:نقود,بطاقة,جيب|علم:دولة,ألوان,سارية|خريطة:دول,اتجاهات,موقع|بوصلة:شمال,جنوب,اتجاه|تلسكوب:نجوم,فضاء,رؤية|مجهر:صغير,مختبر,تكبير|سلم:صعود,درج,ارتفاع|مصعد:عمارة,زر,طوابق|إشارة مرور:أحمر,أخضر,سيارات|وقود:بنزين,سيارة,محطة|عجلة:دائرية,سيارة,مطاط`;
+
+var words = raw.trim().split('|').filter(Boolean).map(function(item) {
+  var parts = item.split(':');
+  return { w: parts[0].trim(), f: parts[1] ? parts[1].split(',') : [] };
+});
+
+var mode = 't', goal = 15, timeSet = 60;
+var scoreB = 0, scoreR = 0, scoreS = 0, turn = 'B';
+var timer = null, timeLeft = 60, used = [];
+
+function go(id) {
+  document.querySelectorAll('.scr').forEach(function(s) { s.classList.remove('act'); });
+  document.getElementById(id).classList.add('act');
+}
+
+function setM(m) {
+  mode = m;
+  document.getElementById('mT').classList.toggle('sel', m === 't');
+  document.getElementById('mS').classList.toggle('sel', m === 's');
+  document.getElementById('bG').style.display = (m === 't') ? 'block' : 'none';
+}
+
+function setG(g) {
+  goal = g;
+  [15, 25, 40].forEach(function(x) {
+    document.getElementById('g' + x).classList.toggle('sel', x === g);
+  });
+}
+
+function setT(t) {
+  timeSet = t;
+  [30, 60, 90].forEach(function(x) {
+    document.getElementById('t' + x).classList.toggle('sel', x === t);
+  });
+}
+
+function start() {
+  scoreB = 0; scoreR = 0; scoreS = 0; turn = 'B'; used = [];
+  if (mode === 't') {
+    prepTurn();
+  } else {
+    play();
+  }
+}
+
+function prepTurn() {
+  document.getElementById('tTxt').innerText = (turn === 'B') ? '🔵 دور الفريق الأزرق' : '🔴 دور الفريق الأحمر';
+  document.getElementById('pB').innerText = scoreB;
+  document.getElementById('pR').innerText = scoreR;
+  go('s2');
+}
+
+function play() {
+  timeLeft = timeSet;
+  document.getElementById('tmr').innerText = timeLeft;
+  document.getElementById('tBar').style.display = (mode === 't') ? 'flex' : 'none';
+  document.getElementById('gLbl').style.display = (mode === 't') ? 'inline' : 'none';
+  document.getElementById('gLbl').innerText = 'الهدف: ' + goal;
+  document.getElementById('sLbl').style.display = (mode === 's') ? 'inline' : 'none';
+  updateScores();
+  nextWord();
+  go('s3');
+  clearInterval(timer);
+  timer = setInterval(function() {
+    timeLeft--;
+    document.getElementById('tmr').innerText = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      endRound();
+    }
+  }, 1000);
+}
+
+function updateScores() {
+  document.getElementById('sB').innerText = scoreB;
+  document.getElementById('sR').innerText = scoreR;
+  document.getElementById('sS').innerText = scoreS;
+  document.getElementById('bB').classList.toggle('on', turn === 'B');
+  document.getElementById('bR').classList.toggle('on', turn === 'R');
+}
+
+function nextWord() {
+  if (used.length >= words.length) used = [];
+  var idx;
+  do {
+    idx = Math.floor(Math.random() * words.length);
+  } while (used.indexOf(idx) !== -1);
+  used.push(idx);
+  var item = words[idx];
+  document.getElementById('wM').innerText = item.w;
+  var fHtml = '';
+  item.f.forEach(function(fw) {
+    fHtml += '<span class="fw">' + fw + '</span>';
+  });
+  document.getElementById('wF').innerHTML = fHtml;
+}
+
+function nxt(ok) {
+  if (ok) {
+    if (mode === 't') {
+      if (turn === 'B') scoreB++; else scoreR++;
+      updateScores();
+      if (scoreB >= goal || scoreR >= goal) {
+        clearInterval(timer);
+        showWinner();
+        return;
+      }
+    } else {
+      scoreS++;
+      updateScores();
+    }
+  }
+  nextWord();
+}
+
+function endRound() {
+  if (mode === 't') {
+    turn = (turn === 'B') ? 'R' : 'B';
+    prepTurn();
+  } else {
+    document.getElementById('eT').innerText = 'انتهى الوقت! ⏱️';
+    document.getElementById('eS').innerText = 'مجموع نقاطك';
+    document.getElementById('eN').innerText = scoreS;
+    go('s4');
+  }
+}
+
+function showWinner() {
+  var winTeam = (scoreB >= goal) ? '🔵 فاز الفريق الأزرق!' : '🔴 فاز الفريق الأحمر!';
+  document.getElementById('eT').innerText = winTeam;
+  document.getElementById('eS').innerText = 'النتيجة النهائية';
+  document.getElementById('eN').innerText = scoreB + ' - ' + scoreR;
+  go('s4');
+}
 </script>
 </body>
 </html>
