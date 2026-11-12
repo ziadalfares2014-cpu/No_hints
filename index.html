@@ -363,6 +363,16 @@ function showWinner() {
   document.getElementById('eN').innerText = scoreB + ' - ' + scoreR;
   go('s4');
 }
+
+ function showWinner() {
+  var winTeam = (scoreB >= goal) ? ('🔵 فاز ' + nameB + '!') : ('🔴 فاز ' + nameR + '!');
+  document.getElementById('eT').innerText = winTeam;
+  document.getElementById('eS').innerText = 'النتيجة النهائية';
+  document.getElementById('eN').innerText = scoreB + ' - ' + scoreR;
+  go('s4');
+}
+
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
 </script>
 </body>
 </html>
